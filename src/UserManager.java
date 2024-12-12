@@ -19,8 +19,8 @@ public class UserManager {
                 if  (parts.length == 4 ){
                     String username = parts[0].trim();
                     String password = parts[1].trim();
-                    double balance = Double.parseDouble(parts[2].trim());
-                    double depositLimit = Double.parseDouble(parts[3].trim());
+                    int balance = Integer.parseInt(parts[2].trim());
+                    int depositLimit = Integer.parseInt(parts[3].trim());
                     users.put(username, new User(username,password,balance,depositLimit));
 
                 }

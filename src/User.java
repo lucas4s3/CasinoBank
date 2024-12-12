@@ -1,10 +1,10 @@
 public class User {
     private String username;
     private String password;
-    private double balance;
-    private double depositLimit;
+    private int balance;
+    private int depositLimit;
 
-    public User(String username, String password, double balance, double depositLimit) {
+    public User(String username, String password, int balance, int depositLimit) {
         this.username = username;
         this.password = password;
         this.balance = balance;
@@ -30,11 +30,11 @@ public class User {
         this.password = password;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 
-    public void setDepositLimit(double depositLimit) {
+    public void setDepositLimit(int depositLimit) {
         this.depositLimit = depositLimit;
     }
     @Override

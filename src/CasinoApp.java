@@ -68,7 +68,9 @@ public class CasinoApp {
 
     // Sätt insättningsgräns
     public void setDepositLimit() {
-
+        System.out.println("vad ska du ha för insättningsgräns?");
+        int DLimit = Integer.parseInt(scanner.nextLine());
+        currentuser.setDepositLimit(DLimit);
     }
 
     // Gå in i spel
