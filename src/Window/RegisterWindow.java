@@ -1,65 +1,56 @@
+package Window;
+
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
 
 public class RegisterWindow extends JFrame {
-
-    private String selectedAvatarPath;
-    private ArrayList<JButton> avatarButtons = new ArrayList<>();
+    private UserDataManager userDataManager;
 
     public RegisterWindow() {
-        setTitle("Registrera dig");
-        setSize(400, 550);
+        this.userDataManager = new UserDataManager();
+        setTitle("Register");
+        setSize(400, 400);
         setResizable(false);
         setFocusable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
 
-        // Lägger till bakgrundsbilden
-        JLabel backgroundLabel = new JLabel(new ImageIcon("src/resources/categoryImages/unknownAura.jpg"));
-        backgroundLabel.setLayout(new BorderLayout()); // Gör så att det går att lägga till komponenter ovanpå
+        JLabel backgroundLabel = new JLabel(new ImageIcon("src/Window/pictures/Designer.jpeg"));
+        backgroundLabel.setLayout(new BorderLayout());
         setContentPane(backgroundLabel);
 
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.Y_AXIS));
-        fieldPanel.setOpaque(false); // Gör panelen genomskinlig
+        fieldPanel.setOpaque(false);
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel usernameLabel = new JLabel("Användarnamn:");
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(Color.WHITE);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 16));
         JTextField usernameField = new JTextField();
         usernameField.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JLabel nameLabel = new JLabel("Visningsnamn:");
-        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        JTextField nameField = new JTextField();
-        nameField.setFont(new Font("Arial", Font.PLAIN, 14));
-
         JLabel passwordLabel = new JLabel("Lösenord:");
+        passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setFont(new Font("Arial", Font.BOLD, 16));
         JPasswordField passwordField = new JPasswordField();
         passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Checkbox för att visa/dölja lösenordet
         JCheckBox showPasswordCheckBox = new JCheckBox("Visa lösenord");
-        showPasswordCheckBox.setOpaque(false); // Gör checkboxen genomskinlig
+        showPasswordCheckBox.setForeground(Color.WHITE);
+        showPasswordCheckBox.setOpaque(false);
         showPasswordCheckBox.setFont(new Font("Arial", Font.PLAIN, 14));
         showPasswordCheckBox.addActionListener(e -> {
             if (showPasswordCheckBox.isSelected()) {
-                passwordField.setEchoChar((char) 0); // Visa texten i lösenordsfältet
+                passwordField.setEchoChar((char) 0);
             } else {
-                passwordField.setEchoChar('*'); // Döljer texten med stjärnor
+                passwordField.setEchoChar('*');
             }
         });
 
         fieldPanel.add(usernameLabel);
         fieldPanel.add(usernameField);
-        fieldPanel.add(Box.createVerticalStrut(10));
-        fieldPanel.add(nameLabel);
-        fieldPanel.add(nameField);
         fieldPanel.add(Box.createVerticalStrut(10));
         fieldPanel.add(passwordLabel);
         fieldPanel.add(passwordField);
@@ -69,18 +60,8 @@ public class RegisterWindow extends JFrame {
 
         backgroundLabel.add(fieldPanel, BorderLayout.NORTH);
 
-        // Panel för avatarval
-        JPanel avatarPanel = new JPanel(new GridLayout(2, 3, 15, 15));
-        TitledBorder avatarBorder = BorderFactory.createTitledBorder("Välj din avatar");
-        avatarBorder.setTitleFont(new Font("Arial", Font.BOLD, 16));
-        avatarPanel.setBorder(avatarBorder);
-        avatarPanel.setOpaque(false); // Gör panelen genomskinlig
-        loadAvatarGrid(avatarPanel);
-
-        backgroundLabel.add(avatarPanel, BorderLayout.CENTER);
-
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setOpaque(false); // Gör panelen genomskinlig
+        buttonPanel.setOpaque(false);
 
         JButton registerButton = new JButton("Registrera dig");
         registerButton.setFocusable(false);
@@ -88,6 +69,13 @@ public class RegisterWindow extends JFrame {
         registerButton.setPreferredSize(new Dimension(200, 30));
         registerButton.setBackground(Color.WHITE);
         registerButton.setForeground(Color.BLACK);
+
+        JButton loginButton = new JButton("Logga in");
+        loginButton.setFocusable(false);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 16));
+        loginButton.setPreferredSize(new Dimension(200, 30));
+        loginButton.setBackground(Color.WHITE);
+        loginButton.setForeground(Color.BLACK);
 
         JButton backButton = new JButton("Tillbaka");
         backButton.setFocusable(false);
@@ -98,82 +86,32 @@ public class RegisterWindow extends JFrame {
 
         registerButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
-            String name = nameField.getText().trim();
             String password = new String(passwordField.getPassword()).trim();
 
-            // Kontrollera att alla fält är ifyllda
-            if (username.isEmpty() || name.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Alla fält måste fyllas i.", "Felmeddelande", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (selectedAvatarPath == null) {
-                JOptionPane.showMessageDialog(this, "Vänligen välj en avatar.", "Felmeddelande", JOptionPane.ERROR_MESSAGE);
-                return;
+            if (userDataManager.registerUser(username, password)) {
+                JOptionPane.showMessageDialog(this, "Registrering lyckades!");
+                setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "Användarnamnet är upptaget.", "Felmeddelande", JOptionPane.ERROR_MESSAGE);
             }
-
         });
 
-        // Action listener för backButton
-        backButton.addActionListener(e -> {
-            setVisible(false);
-        });
+        backButton.addActionListener(e -> setVisible(false));
 
         buttonPanel.add(registerButton);
+        buttonPanel.add(loginButton);
         buttonPanel.add(backButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
-
-
         setVisible(true);
-    }
-    // Metod för att ladda avatarer
-    private void loadAvatarGrid(JPanel avatarPanel) {
-        String avatarsPath = "src/resources/avatars/"; // Sökvägen till alla avatarer
-        File folder = new File(avatarsPath);
-
-        if (folder.exists() && folder.isDirectory()) {
-            File[] avatarFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
-
-            if (avatarFiles != null && avatarFiles.length == 6) { // Kontrollerar att det finns exakt 6 avatarer
-                for (File file : avatarFiles) {
-                    ImageIcon avatarIcon = new ImageIcon(file.getAbsolutePath());
-                    Image scaledImage = avatarIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH); // Skalar om bilden
-                    avatarIcon = new ImageIcon(scaledImage);
-
-                    JButton avatarButton = new JButton();
-                    avatarButton.setFocusable(false);
-                    avatarButton.setContentAreaFilled(false); // Tar bort bakgrund
-                    avatarButton.setBorder(BorderFactory.createEmptyBorder()); // Tar bort kantlinje
-                    avatarButton.setIcon(avatarIcon);
-                    avatarButton.setHorizontalAlignment(SwingConstants.CENTER);
-                    avatarButton.setVerticalAlignment(SwingConstants.CENTER);
-
-                    avatarButton.setPreferredSize(new Dimension(50, 50)); // Sätter knappstorleken
-
-                    avatarButton.setActionCommand(file.getName());
-                    avatarButton.addActionListener(e -> {
-                        for (JButton button : avatarButtons) {
-                            button.setBorder(BorderFactory.createEmptyBorder());
-                        }
-                        avatarButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
-                        selectedAvatarPath = "src/resources/avatars/" + e.getActionCommand();
-                    });
-
-                    avatarButtons.add(avatarButton);
-                    avatarPanel.add(avatarButton);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "6 avatarer är ett måste!", "Fel", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Avatar mappen hittas ej!", "Fel", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public static void main(String[] args) {
-        RegisterWindow r = new RegisterWindow();
+        new RegisterWindow();
     }
 }
-
-

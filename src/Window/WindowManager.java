@@ -1,3 +1,5 @@
+package Window;
+
 public class WindowManager {
     private RegisterWindow registerWindow;
 
