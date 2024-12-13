@@ -1,12 +1,10 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CasinoApp {
     Scanner scanner = new Scanner(System.in);
     UserManager userManager = new UserManager();
     User currentuser;
+    int balance;
 
     boolean isLoggedIn = false;
     boolean inGame = false;
@@ -25,6 +23,18 @@ public class CasinoApp {
     public void logInUser() {
         ArrayList<String> credentials = getCredentials();
         userManager.loginUser(credentials.get(0), credentials.get(1));
+        System.out.println("Användarnamn: ");
+        String userName = scanner.next().trim();
+        System.out.println("Lösenord: ");
+        String password = scanner.next().trim();
+        User user = userManager.loginUser(userName, password);
+        if (user != null) {
+            currentuser = user;
+            balance = currentuser.getBalance();
+            isLoggedIn = true;
+        } else {
+            System.out.println("Inloggning misslyckades, försök igen.");
+        }
     }
 
     // Registrera konto
@@ -35,16 +45,16 @@ public class CasinoApp {
 
     // Logga ut
     public void logOutUser() {
-
+        currentuser = null;
+        System.out.println("Du är utloggad.");
     }
 
     // Uttag
-    public void withdraw(double amount) {
-
+    public void withdraw(int amount) {
     }
 
     // Insättning
-    public void deposit(double amount) {
+    public void deposit(int amount) {
 
     }
 

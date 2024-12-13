@@ -16,10 +16,10 @@ public class User {
     public String getPassword() {
         return password;
     }
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
-    public double getDepositLimit() {
+    public int getDepositLimit() {
         return depositLimit;
     }
     public void setUsername(String username) {
