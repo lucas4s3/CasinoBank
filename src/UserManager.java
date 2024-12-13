@@ -43,14 +43,14 @@ public class UserManager {
         return true;
     }
 
-    public boolean loginUser(String username, String password){
+    public User loginUser(String username, String password){
         User user = users.get(username);
         if (user != null && user.getPassword().equals(password)){
             System.out.println("Du är inloggad som: " + user.getUsername());
-            return true;
+            return user;
         }
         System.out.println("Inloggning misslyckades");
-        return false;
+        return null;
     }
     public void saveUsers(){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH,true))){
