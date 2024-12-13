@@ -22,7 +22,9 @@ public class CasinoApp {
     // Logga in
     public void logInUser() {
         ArrayList<String> credentials = getCredentials();
-        User user = userManager.loginUser(credentials.get(0), credentials.get(1));
+        currentuser = userManager.loginUser(credentials.get(0), credentials.get(1));
+        isLoggedIn = true;
+        System.out.println(currentuser);
     }
 
     // Registrera konto

@@ -1,6 +1,6 @@
 public class RouletteGame implements Game {
-    public static final double MIN_BET = 5.0;
-    public static final double MAX_BET = 1000.0;
+    public static final int MIN_BET = 5;
+    public static final int MAX_BET = 1000;
 
     @Override
     public void startGame() {
