@@ -3,8 +3,12 @@ public class GameFactory {
 
     }
 
-    public Game createGame(String game) {
+    public Game getGame(GameType game) {
+        if (game == GameType.SLOTGAME) {
+            return new SlotsGame();
+        } else {
+            return new RouletteGame();
+        }
 
-        return null; // Ändra sen
     }
- }
+}
