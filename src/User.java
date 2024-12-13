@@ -16,7 +16,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    public int getBalance() {
+    public static int getBalance() {
         return balance;
     }
     public int getDepositLimit() {
@@ -30,11 +30,11 @@ public class User {
         this.password = password;
     }
 
-    public void setBalance(int balance) {
+    public static void setBalance(int balance) {
         this.balance = balance;
     }
 
-    public void setDepositLimit(int depositLimit) {
+    public static void setDepositLimit(int depositLimit) {
         this.depositLimit = depositLimit;
     }
     @Override

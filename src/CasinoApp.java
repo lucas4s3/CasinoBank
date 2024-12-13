@@ -40,13 +40,37 @@ public class CasinoApp {
     }
 
     // Uttag
+    // Uttag
     public void withdraw(int amount) {
+        if (amount <= 0) {
+            System.out.println("Beloppet måste vara större än 0.");
+            return;
+        }
+
+        if (currentuser.getBalance() >= amount) {
+            currentuser.setBalance(currentuser.getBalance() - amount);
+            System.out.println("Du har tagit ut " + amount + " kr. Din nya balans är: " + currentuser.getBalance() + " kr.");
+        } else {
+            System.out.println("Otillräcklig balans för att göra detta uttag.");
+        }
     }
 
     // Insättning
+    // Insättning
     public void deposit(int amount) {
+        if (amount <= 0) {
+            System.out.println("Beloppet måste vara större än 0.");
+            return;
+        }
 
+        if (currentuser.getBalance() + amount <= currentuser.getDepositLimit()) {
+            currentuser.setBalance(currentuser.getBalance() + amount);
+            System.out.println("Du har satt in " + amount + " kr. Din nya balans är: " + currentuser.getBalance() + " kr.");
+        } else {
+            System.out.println("Beloppet överskrider din insättningsgräns. Försök med ett lägre belopp.");
+        }
     }
+
 
     // Sätt insättningsgräns
     public void setDepositLimit() {
