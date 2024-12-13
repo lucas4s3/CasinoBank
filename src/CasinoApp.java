@@ -40,7 +40,6 @@ public class CasinoApp {
     }
 
     // Uttag
-    // Uttag
     public void withdraw(int amount) {
         if (amount <= 0) {
             System.out.println("Beloppet måste vara större än 0.");
@@ -55,7 +54,6 @@ public class CasinoApp {
         }
     }
 
-    // Insättning
     // Insättning
     public void deposit(int amount) {
         if (amount <= 0) {
