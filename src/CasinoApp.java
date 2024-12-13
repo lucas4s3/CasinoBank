@@ -8,47 +8,29 @@ public class CasinoApp {
     UserManager userManager = new UserManager();
     User currentuser;
 
-
     boolean isLoggedIn = false;
+    boolean inGame = false;
 
     public CasinoApp () {
-        String userChoice = "";
 
         if (!isLoggedIn) {
-            System.out.println("Logga in eller Registrera nytt konto: ");
-            userChoice = scanner.nextLine();
-
-            if (userChoice.equalsIgnoreCase("Logga in")) {
-                logInUser();
-                isLoggedIn = true;
-            } else if (userChoice.equalsIgnoreCase("Registrera")) {
-                registerUser();
-                isLoggedIn = true;
-            }
+            displayNotLoggedIn();
+        } else {
+            displayLoggedIn();
         }
-
-
-
-
 
     }
 
     // Logga in
     public void logInUser() {
-        System.out.println("Användarnamn: ");
-        String userName = scanner.next();
-        System.out.println("Lösenord: ");
-        String password = scanner.next();
-        userManager.loginUser(userName, password);
+        ArrayList<String> credentials = getCredentials();
+        userManager.loginUser(credentials.get(0), credentials.get(1));
     }
 
     // Registrera konto
     public void registerUser() {
-        System.out.println("Användarnamn: ");
-        String userName = scanner.next();
-        System.out.println("Lösenord: ");
-        String password = scanner.next();
-        userManager.registerUser(userName, password);
+        ArrayList<String> credentials = getCredentials();
+        userManager.registerUser(credentials.get(0), credentials.get(1));
     }
 
     // Logga ut
@@ -80,6 +62,43 @@ public class CasinoApp {
 
     // Gå ut ur spel
     public void quitGame() {
+
+    }
+
+    private ArrayList<String> getCredentials() {
+        ArrayList<String> credentials = new ArrayList<>();
+        System.out.println("Användarnamn: ");
+        String userName = scanner.next();
+        System.out.println("Lösenord: ");
+        String password = scanner.next();
+
+        credentials.add(userName);
+        credentials.add(password);
+
+        return credentials;
+
+    }
+
+    private void displayNotLoggedIn() {
+        String userChoice = "";
+
+        System.out.println("Logga in eller Registrera nytt konto: ");
+        userChoice = scanner.nextLine();
+
+        if (userChoice.equalsIgnoreCase("Logga in")) {
+            logInUser();
+            isLoggedIn = true;
+        } else if (userChoice.equalsIgnoreCase("Registrera")) {
+            registerUser();
+            isLoggedIn = true;
+        }
+    }
+
+    private void displayLoggedIn() {
+
+    }
+
+    private void displayInGame() {
 
     }
 
