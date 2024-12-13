@@ -1,9 +1,5 @@
-public class RouletteGame implements Game {
+public class BlackJackGame implements Game {
     double MIN_BET = 10;
-
-    public RouletteGame() {
-
-    }
 
     @Override
     public void startGame() {
