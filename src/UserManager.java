@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class UserManager {
     private final String FILE_PATH = "users.txt";
     private Map<String, User> users = new HashMap<>();
