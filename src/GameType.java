@@ -1,4 +1,5 @@
 public enum GameType {
-    ROULETTEGAME,
-    SLOTGAME,
+    ROULETTE,
+    SLOTS,
+    BLACKJACK,
 }

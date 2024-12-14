@@ -7,12 +7,14 @@ public class BlackJackGame implements Game {
     }
 
     @Override
-    public void quitGame() {
+    public void displayInstructions() {
 
     }
 
     @Override
-    public boolean validateBet() {
-        return false;
+    public double calculateWinnings() {
+        return 0;
     }
+
+
 }

@@ -1,7 +1,7 @@
 public interface Game {
 
     void startGame();
-    void quitGame();
-    boolean validateBet();
+    void displayInstructions();
+    double calculateWinnings();
 
 }

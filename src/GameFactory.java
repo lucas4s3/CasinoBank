@@ -1,14 +1,10 @@
 public class GameFactory {
-    public GameFactory() {
-
-    }
 
     public Game getGame(GameType game) {
-        if (game == GameType.SLOTGAME) {
-            return new SlotsGame();
-        } else {
-            return new RouletteGame();
-        }
-
+        return switch (game) {
+            case SLOTS -> new SlotsGame();
+            case ROULETTE -> new RouletteGame();
+            case BLACKJACK -> new BlackJackGame();
+        };
     }
 }
