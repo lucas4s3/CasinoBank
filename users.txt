@@ -1,3 +1,1 @@
-Adam,Test,100,9999999
-adam,Test,0,9999999
-Lucas,Test,1000,999
+1,Adam,Test,100.0,9999999.0

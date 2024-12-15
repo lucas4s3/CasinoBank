@@ -14,11 +14,10 @@ public class SlotsGame implements Game {
 
     @Override
     public double calculateWinnings() {
-        // Slots-specifik logik
         return Math.random() * MAX_BET;
     }
 
     public int spinSlots() {
-        return (int) (Math.random() * 100); // Slots-logik
+        return (int) (Math.random() * 100);
     }
 }

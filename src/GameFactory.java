@@ -2,7 +2,7 @@ public class GameFactory {
     public static Game createGame(String gameType) {
         switch (gameType.toLowerCase()) {
             case "roulette":
-               // return new RouletteGame();
+                return new RouletteGame();
             case "slots":
                 return new SlotsGame();
             default:

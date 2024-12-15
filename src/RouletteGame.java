@@ -14,11 +14,10 @@ public class RouletteGame implements Game {
 
     @Override
     public double calculateWinnings() {
-        // Roulette-specifik logik
         return Math.random() * MAX_BET;
     }
 
     public int spinWheel() {
-        return (int) (Math.random() * 36); // 0-35, roulette-hjul
+        return (int) (Math.random() * 36);
     }
 }
