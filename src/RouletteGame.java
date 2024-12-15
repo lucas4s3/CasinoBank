@@ -65,15 +65,11 @@ public class RouletteGame implements Game {
 
     }
 
-    @Override
-    public double calculateWinnings() {
-        return 0;
+
+    public void spinWheel(int userChoice) {
+        System.out.println("Spinning wheel");
     }
 
-    public double spinWheel(int userChoice) {
-        System.out.println("Spinning wheel");
-        return 20;
-    }
 
     public static void main(String[] args) {
         new RouletteGame();

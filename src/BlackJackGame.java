@@ -29,10 +29,6 @@ public class BlackJackGame implements Game {
 
     }
 
-    @Override
-    public double calculateWinnings() {
-        return 0;
-    }
 
     public static void main(String[] args) {
         new

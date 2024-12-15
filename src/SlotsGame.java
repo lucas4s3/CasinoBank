@@ -29,10 +29,6 @@ public class SlotsGame implements Game {
         System.out.println("-".repeat(40));
     }
 
-    @Override
-    public double calculateWinnings() {
-        return 0;
-    }
 
     public static void main(String[] args) {
         new SlotsGame();
