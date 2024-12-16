@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class CasinoApp {
     Blackjack blackJack;
+    RouletteGame roulette;
     Scanner scanner = new Scanner(System.in);
     UserManager userManager = new UserManager();
     User currentuser;
@@ -197,6 +198,8 @@ public class CasinoApp {
                     case "1":
                             blackJack = new Blackjack(currentuser);
 
+                    case "2":
+                        roulette = new RouletteGame();
                 }
 
             }
