@@ -1,12 +1,9 @@
 public class GameFactory {
-    public static Game createGame(String gameType) {
-        switch (gameType.toLowerCase()) {
-            case "roulette":
-               // return new RouletteGame();
-            case "slots":
-                return new SlotsGame();
-            default:
-                throw new IllegalArgumentException("Invalid game type: " + gameType);
-        }
+
+    public Game getGame(GameType game) {
+        return switch (game) {
+            case ROULETTE -> new RouletteGame();
+            case BLACKJACK -> new BlackJackGame();
+        };
     }
 }
