@@ -190,4 +190,8 @@ public class RouletteGame extends JFrame {
         }
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(RouletteGame::new);
+    }
 }
+
