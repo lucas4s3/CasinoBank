@@ -181,8 +181,7 @@ public class Blackjack implements Game {
         standButton.setEnabled(false);
         updateHands();
         resetScores();
-        playerSum = 0;
-        dealerSum = 0;
+
     }
 
     private void playerHit() {
@@ -237,16 +236,22 @@ public class Blackjack implements Game {
                 int winnings = betAmount * 2;
                 player.setBalance(player.getBalance() + winnings);
                 playerBalance.setText("Balance: " + player.getBalance());
-                JOptionPane.showMessageDialog(frame, "Du vann " + winnings + "!");
+                playerPanel.setBorder(BorderFactory.createTitledBorder("You won! " + winnings));
+                //JOptionPane.showMessageDialog(frame, "Du vann " + winnings + "!");
+                endGame();
+
             } catch (NumberFormatException e) {
                 throw new RuntimeException(e);
             }
         } else if (dealerSum == playerSum) {
             betAmount = Integer.parseInt(betField.getText());
             player.setBalance(player.getBalance() + betAmount);
-            JOptionPane.showMessageDialog(frame, "Det vart lika");
+            playerPanel.setBorder(BorderFactory.createTitledBorder("its a tie! "));
+          //  JOptionPane.showMessageDialog(frame, "Det vart lika");
+            endGame();
         } else
-            JOptionPane.showMessageDialog(frame,"Dealern vann");
+            playerPanel.setBorder(BorderFactory.createTitledBorder("You lose! "));
+         //   JOptionPane.showMessageDialog(frame,"Dealern vann");
         gameOver = true;
         hitButton.setEnabled(false);
         standButton.setEnabled(false);
