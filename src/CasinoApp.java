@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CasinoApp {
+    Blackjack blackJack;
     Scanner scanner = new Scanner(System.in);
     UserManager userManager = new UserManager();
     User currentuser;
@@ -10,13 +11,7 @@ public class CasinoApp {
     boolean inGame = false;
 
     public CasinoApp() {
-
-        if (!isLoggedIn) {
-            displayNotLoggedIn();
-        } else {
-            displayLoggedIn();
-        }
-
+        displayNotLoggedIn();
     }
 
     // Logga in
@@ -27,6 +22,7 @@ public class CasinoApp {
             currentuser = user;
             isLoggedIn = true;
             System.out.println("Välkommen " + currentuser.getUsername() + "!");
+            System.out.println(currentuser);
             displayLoggedIn();
         } else {
             System.out.println("Inloggning misslyckades");
@@ -38,6 +34,7 @@ public class CasinoApp {
     public void registerUser() {
         ArrayList<String> credentials = getCredentials();
         userManager.registerUser(credentials.get(0), credentials.get(1));
+        displayNotLoggedIn();
     }
 
     // Logga ut
@@ -115,10 +112,6 @@ public class CasinoApp {
 
     // Gå in i spel
     public void enterGame() {
-        if (!isLoggedIn) {
-            System.out.println("Du måste vara inloggad för att spela.");
-            return;
-        }
         inGame = true;
         displayInGame();
 
@@ -134,9 +127,9 @@ public class CasinoApp {
     private ArrayList<String> getCredentials() {
         ArrayList<String> credentials = new ArrayList<>();
         System.out.println("Användarnamn: ");
-        String userName = scanner.next();
+        String userName = scanner.nextLine().trim();
         System.out.println("Lösenord: ");
-        String password = scanner.next();
+        String password = scanner.nextLine().trim();
 
         credentials.add(userName);
         credentials.add(password);
@@ -146,19 +139,21 @@ public class CasinoApp {
     }
 
     private void displayNotLoggedIn() {
-        String userChoice = "";
+        String userChoice;
 
         System.out.println("Logga in eller Registrera nytt konto: ");
-        userChoice = scanner.nextLine();
+        userChoice = scanner.nextLine().trim();
 
         if (userChoice.equalsIgnoreCase("Logga in")) {
             logInUser();
-            isLoggedIn = true;
         } else if (userChoice.equalsIgnoreCase("Registrera")) {
             registerUser();
-            isLoggedIn = true;
+        } else {
+            System.out.println("Ogiltigt val, försök igen.");
+            displayNotLoggedIn();
         }
     }
+
 
     private void displayLoggedIn() {
         while (isLoggedIn && !inGame) {
@@ -196,15 +191,13 @@ public class CasinoApp {
     }
 
             private void displayInGame() {
-                System.out.println("Du är nu i spelmenyn (exempel). Skriv 'quit' för att gå tillbaka.");
+                System.out.println("Du är i spelmenyn. Skriv '1' för BlackJack. '2' för Roulette. '3' för Slots");
                 String input = scanner.nextLine();
-                if ("quit".equalsIgnoreCase(input)) {
-                    quitGame();
-                } else {
-                    System.out.println("Spelet ej implementerat ännu. Skriv 'quit' för att sluta.");
-                    displayInGame();
-                }
+                switch (input) {
+                    case "1":
+                            blackJack = new Blackjack(currentuser);
 
+                }
 
             }
 
