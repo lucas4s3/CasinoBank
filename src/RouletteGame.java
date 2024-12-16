@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class RouletteGame extends JFrame {
+public class RouletteGame extends JFrame implements  Game {
     private JLabel balanceLabel; // Visar spelarens nuvarande balans
     private JLabel resultLabel; // Visar resultatet av den senaste spinnen
     private JTextField betField; // Fält för att mata in insatsen
@@ -77,6 +77,16 @@ public class RouletteGame extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true); // Visar fönstret
+    }
+
+    @Override
+    public void startGame() {
+
+    }
+
+    @Override
+    public void displayInstructions() {
+
     }
 
     private class SpinButtonListener implements ActionListener {

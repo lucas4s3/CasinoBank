@@ -70,13 +70,8 @@ public class Blackjack implements Game {
     }
 
     @Override
-    public boolean validateBet(double bet) {
-        return false;
-    }
+    public void displayInstructions() {
 
-    @Override
-    public double calculateWinnings() {
-        return 0;
     }
 
     private void initalizeUI(){
