@@ -29,7 +29,9 @@ public class RouletteGame extends JFrame implements Game {
         JPanel topPanel = new JPanel(new GridLayout(2, 1));
         balanceLabel = new JLabel("Balance: $" + user.getBalance());
         resultLabel = new JLabel("Place your bet and spin the wheel!");
+        JButton instructions = new JButton("Instructions");
         topPanel.add(balanceLabel);
+        topPanel.add(instructions);
         topPanel.add(resultLabel);
         add(topPanel, BorderLayout.NORTH);
 
@@ -49,9 +51,13 @@ public class RouletteGame extends JFrame implements Game {
         bottomPanel.add(betTypeComboBox);
 
         spinButton = new JButton("Spin the Wheel");
+
+        instructions.addActionListener(e -> displayInstructions());
         spinButton.addActionListener(new SpinButtonListener());
         bottomPanel.add(spinButton);
         add(bottomPanel, BorderLayout.SOUTH);
+
+        this.setLocationRelativeTo(null);
 
         // Notera att vi inte anropar setVisible(true) här. Det gör vi i startGame().
     }
@@ -65,7 +71,7 @@ public class RouletteGame extends JFrame implements Game {
     @Override
     public void displayInstructions() {
         String instructions = "Roulette-instruktioner:\n" +
-                "- Välj vilken typ av satsning du vill göra (Röd, Svart, Udda, Jämn eller ett specifikt nummer).\n" +
+                "- Välj vas du vill satsa på. (Röd, Svart, grön).\n" +
                 "- Ange hur mycket du vill satsa och klicka på 'Spin the Wheel'.\n" +
                 "- Om du vinner läggs vinsten till ditt saldo.";
         JOptionPane.showMessageDialog(this, instructions, "Instruktioner", JOptionPane.INFORMATION_MESSAGE);
