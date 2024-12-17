@@ -133,9 +133,17 @@ public class CasinoUI {
     }
 
     private void handlePlayGame() {
-        System.out.println("Vilket spel vill du spela? (blackjack/roulette)");
-        String gameType = scanner.nextLine();
-        app.playGame(gameType);
+        while (true) {
+            System.out.println("Vilket spel vill du spela? (Blackjack/Roulette)");
+            String gameType = scanner.nextLine();
+
+            try {
+                app.playGame(gameType);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Fel: " + e.getMessage() + " Försök igen.");
+            }
+        }
     }
 
     private void handleInGameMenu() {
