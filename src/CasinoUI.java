@@ -1,8 +1,9 @@
 import java.util.Scanner;
 
 public class CasinoUI {
+    static UserManager userManager = UserManager.getInstance();
     public static void main(String[] args) {
-        UserManager userManager = new UserManager();
+
         CasinoApp app = new CasinoApp(userManager);
         Scanner scanner = new Scanner(System.in);
 

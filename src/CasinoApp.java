@@ -23,10 +23,9 @@ public class CasinoApp {
 
     public boolean registerUser(String username, String password) {
         if (userManager.findUser(username) != null) {
-            return false; // Användaren finns redan
+            return false;
         }
-        int newId = userManager.generateNewUserId();
-        User newUser = new User(newId, username, password, 0.0, 9999999.0);
+        User newUser = new User(username, password, 0.0, 9999999.0);
         userManager.addUser(newUser);
         return true;
     }

@@ -3,11 +3,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserManager {
+    private static UserManager instance;
     private final String FILE_PATH = "users.txt";
     private Map<String, User> users = new HashMap<>();
 
-    public UserManager() {
+    private UserManager() {
         loadUsers();
+    }
+
+    //Singleton
+    public static synchronized UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
     }
 
     private void loadUsers() {
@@ -16,12 +25,11 @@ public class UserManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 5) {
-                    int id = Integer.parseInt(parts[0].trim());
                     String username = parts[1].trim();
                     String password = parts[2].trim();
                     double balance = Double.parseDouble(parts[3].trim());
                     double depositLimit = Double.parseDouble(parts[4].trim());
-                    users.put(username, new User(id, username, password, balance, depositLimit));
+                    users.put(username, new User(username, password, balance, depositLimit));
                 }
             }
         } catch (FileNotFoundException e) {
@@ -43,11 +51,6 @@ public class UserManager {
 
     public User findUser(String username) {
         return users.get(username);
-    }
-
-    public int generateNewUserId() {
-        // Enkel generering baserat på storlek
-        return users.size() + 1;
     }
 
     public void saveUsers() {
