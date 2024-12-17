@@ -40,7 +40,6 @@ public class Blackjack implements Game {
     }
 
     public void startGame() {
-        System.out.println(player);
         dealerHand = new ArrayList<>();
         createDeck();
         shuffleDeck();

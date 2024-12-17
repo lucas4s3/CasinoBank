@@ -1,5 +1,4 @@
 public class User {
-    private int id;
     private String username;
     private String password;
     private double accountBalance;
@@ -24,6 +23,6 @@ public class User {
 
     @Override
     public String toString() {
-        return id + "," + username + "," + password + "," + accountBalance + "," + depositLimit;
+        return username + "," + password + "," + accountBalance + "," + depositLimit;
     }
 }
