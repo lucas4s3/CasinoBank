@@ -35,19 +35,14 @@ public class CasinoApp {
         isLoggedIn = false;
     }
 
-    public void playGame(String type) {
-        if (!isLoggedIn) {
-            System.out.println("Du måste vara inloggad för att spela.");
-            return;
+    public void playGame(String chosenGame) throws IllegalArgumentException {
+        switch (chosenGame.toUpperCase()) {
+            case "BLACKJACK" -> currentGame = GameFactory.getGame(GameType.BLACKJACK, currentUser);
+            case "ROULETTE" -> currentGame = GameFactory.getGame(GameType.ROULETTE, currentUser);
+            default -> throw new IllegalArgumentException("Ogiltigt spel.");
         }
-        try {
-            GameType gameType = GameType.valueOf(type.toUpperCase());
-            currentGame = GameFactory.getGame(gameType, currentUser);
-            currentGame.startGame();
-            inGame = true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Ogiltigt speltyp. Välj 'blackjack' eller 'roulette'.");
-        }
+        currentGame.startGame();
+        inGame = true;
     }
 
     public void quitGame() {
@@ -61,11 +56,6 @@ public class CasinoApp {
     }
 
     public void addFunds(double amount) {
-        if (!isLoggedIn || currentUser == null) {
-            System.out.println("Du måste vara inloggad.");
-            return;
-        }
-
         if (amount <= 0) {
             System.out.println("Beloppet måste vara större än 0.");
             return;
@@ -82,10 +72,6 @@ public class CasinoApp {
     }
 
     public void withdrawFunds(double amount) {
-        if (!isLoggedIn || currentUser == null) {
-            System.out.println("Du måste vara inloggad.");
-            return;
-        }
 
         if (amount <= 0) {
             System.out.println("Beloppet måste vara större än 0.");
@@ -103,18 +89,11 @@ public class CasinoApp {
     }
 
     public String viewAccountInfo() {
-        if (!isLoggedIn || currentUser == null) {
-            return "Ingen användare inloggad.";
-        }
         return "Användare: " + currentUser.getUsername() + ", Saldo: " + currentUser.getBalance() +
                 ", Insättningsgräns: " + currentUser.getDepositLimit();
     }
 
     public void setDepositLimit(double limit) {
-        if (!isLoggedIn || currentUser == null) {
-            System.out.println("Du måste vara inloggad.");
-            return;
-        }
 
         if (limit <= 0) {
             System.out.println("Gränsen måste vara större än 0.");
@@ -126,6 +105,7 @@ public class CasinoApp {
         System.out.println("Ny insättningsgräns: " + currentUser.getDepositLimit());
     }
 
+    // Getters - - - - - -
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
