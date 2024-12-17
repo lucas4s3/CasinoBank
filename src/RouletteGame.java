@@ -1,69 +1,43 @@
-/*public class RouletteGame implements Game {
-    public static final int MIN_BET = 5;
-    public static final int MAX_BET = 1000;
-
-    @Override
-    public void startGame() {
-        System.out.println("Starting Roulette game...");
-    }
-
-    @Override
-    public boolean validateBet(double bet) {
-        return bet >= MIN_BET && bet <= MAX_BET;
-    }
-
-    @Override
-    public double calculateWinnings() {
-        // Roulette-specifik logik
-        return Math.random() * MAX_BET;
-    }
-
-    public int spinWheel() {
-        return (int) (Math.random() * 36); // 0-35, roulette-hjul
-    }
-}
-
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class RouletteGame extends JFrame {
-    private JLabel balanceLabel; // Visar spelarens nuvarande balans
-    private JLabel resultLabel; // Visar resultatet av den senaste spinnen
-    private JTextField betField; // Fält för att mata in insatsen
-    private JComboBox<String> betTypeComboBox; // Rullgardinsmeny för att välja satsningstyp
-    private JButton spinButton; // Knapp för att snurra hjulet
-    private int balance;  // Startbalansen för spelaren
-    private RouletteWheelPanel wheelPanel; // Panel som visar roulettehjulet
-    private Timer spinTimer; // Timer för att animera hjulets rotation
-    private User player;
 
-    public RouletteGame(User currentuser) {
-        // Konfigurerar fönstret
-        this.player = currentuser;
-        this.balance = player.getBalance();
+
+public class RouletteGame extends JFrame implements Game {
+    private User user;
+    private JLabel balanceLabel;
+    private JLabel resultLabel;
+    private JTextField betField;
+    private JComboBox<String> betTypeComboBox;
+    private JButton spinButton;
+    private RouletteWheelPanel wheelPanel;
+    private Timer spinTimer;
+
+    public RouletteGame(User user) {
+        this.user = user;
+        // Byt ut den lokala balance mot user.getBalance() nedan.
+
         setTitle("Roulette Game");
         setSize(500, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // DISPOSE_ON_CLOSE så du kan stänga fönstret utan att avsluta hela programmet
         setLayout(new BorderLayout());
 
-        // Skapar topp panelen
+        // Toppanel
         JPanel topPanel = new JPanel(new GridLayout(2, 1));
-        balanceLabel = new JLabel("Balance: $" + balance);
+        balanceLabel = new JLabel("Balance: $" + user.getBalance());
         resultLabel = new JLabel("Place your bet and spin the wheel!");
         topPanel.add(balanceLabel);
         topPanel.add(resultLabel);
         add(topPanel, BorderLayout.NORTH);
 
-        // Skapar panelen med roulettehjulet
+        // Roulettehjulet
         wheelPanel = new RouletteWheelPanel();
         add(wheelPanel, BorderLayout.CENTER);
 
-        // Skapar botten panelen för insats och kontroller
+        // Bottenpanel för satsning
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(new JLabel("Bet Amount:"));
         betField = new JTextField(5);
@@ -79,7 +53,27 @@ public class RouletteGame extends JFrame {
         bottomPanel.add(spinButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setVisible(true); // Visar fönstret
+        // Notera att vi inte anropar setVisible(true) här. Det gör vi i startGame().
+    }
+
+    @Override
+    public void startGame() {
+        // När spelet ska startas, visar vi fönstret:
+        setVisible(true);
+    }
+
+    @Override
+    public void displayInstructions() {
+        String instructions = "Roulette-instruktioner:\n" +
+                "- Välj vilken typ av satsning du vill göra (Röd, Svart, Udda, Jämn eller ett specifikt nummer).\n" +
+                "- Ange hur mycket du vill satsa och klicka på 'Spin the Wheel'.\n" +
+                "- Om du vinner läggs vinsten till ditt saldo.";
+        JOptionPane.showMessageDialog(this, instructions, "Instruktioner", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void closeGame() {
+        dispose();
     }
 
     private class SpinButtonListener implements ActionListener {
@@ -90,7 +84,7 @@ public class RouletteGame extends JFrame {
 
             try {
                 betAmount = Integer.parseInt(betField.getText());
-                if (betAmount <= 0 || betAmount > balance) {
+                if (betAmount <= 0 || betAmount > user.getBalance()) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
@@ -98,22 +92,21 @@ public class RouletteGame extends JFrame {
                 return;
             }
 
-            spinButton.setEnabled(false); // Inaktiverar knappen under snurr
-
+            spinButton.setEnabled(false);
             Random random = new Random();
-            int resultNumber = random.nextInt(37); // Random nummer mellan 0 och 36
+            int resultNumber = random.nextInt(37);
 
             spinTimer = new Timer(50, new ActionListener() {
                 private int rotations = 0;
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    wheelPanel.rotateWheel(); // Roterar hjulet grafiskt
+                    wheelPanel.rotateWheel();
                     rotations++;
 
-                    if (rotations > 50) { // Stoppar snurr efter ett antal rotationer
+                    if (rotations > 50) {
                         spinTimer.stop();
-                        spinButton.setEnabled(true); // Aktiverar knappen igen
+                        spinButton.setEnabled(true);
 
                         String color = wheelPanel.getColorForNumber(resultNumber);
                         checkBet(betType, betAmount, resultNumber, color);
@@ -121,48 +114,49 @@ public class RouletteGame extends JFrame {
                 }
             });
 
-            spinTimer.start(); // Startar snurr animationen
+            spinTimer.start();
         }
 
         private void checkBet(String betType, int betAmount, int resultNumber, String color) {
             boolean win = false;
-            if (betType.equals("Red") && color.equals("Red") ||
-                    betType.equals("Black") && color.equals("Black") ||
-                    betType.equals("Odd") && resultNumber % 2 != 0 && resultNumber != 0 ||
-                    betType.equals("Even") && resultNumber % 2 == 0 && resultNumber != 0 ||
+            if ((betType.equals("Red") && color.equals("Red")) ||
+                    (betType.equals("Black") && color.equals("Black")) ||
+                    (betType.equals("Odd") && resultNumber % 2 != 0 && resultNumber != 0) ||
+                    (betType.equals("Even") && resultNumber % 2 == 0 && resultNumber != 0) ||
                     (betType.equals("Number") && betField.getText().equals(String.valueOf(resultNumber)))) {
                 win = true;
             }
 
+            double currentBalance = user.getBalance();
+
             if (win) {
                 int payout = betType.equals("Number") ? betAmount * 35 : betAmount * 2;
-                balance += payout;
+                user.setBalance(currentBalance + payout);
                 resultLabel.setText("You win! Number: " + resultNumber + " (" + color + ")");
             } else {
-                balance -= betAmount;
+                user.setBalance(currentBalance - betAmount);
                 resultLabel.setText("You lose! Number: " + resultNumber + " (" + color + ")");
             }
 
-            balanceLabel.setText("Balance: $" + balance);
-            player.setBalance(balance);
+            balanceLabel.setText("Balance: $" + user.getBalance());
 
-            if (balance <= 0) {
+            if (user.getBalance() <= 0) {
                 JOptionPane.showMessageDialog(RouletteGame.this, "Game Over! You're out of money.");
-                System.exit(0);
+                dispose(); // Stänger spelet om pengarna tar slut
             }
         }
     }
 
     private class RouletteWheelPanel extends JPanel {
-        private int currentAngle = 0; // Håller reda på den nuvarande vinkeln för hjulet
+        private int currentAngle = 0;
 
         public RouletteWheelPanel() {
-            setPreferredSize(new Dimension(400, 400)); // Sätter panelstorleken
+            setPreferredSize(new Dimension(400, 400));
         }
 
         public void rotateWheel() {
-            currentAngle = (currentAngle + 15) % 360; // Ökar vinkeln för att simulera rotation
-            repaint(); // Uppdaterar panelen grafiskt
+            currentAngle = (currentAngle + 15) % 360;
+            repaint();
         }
 
         public String getColorForNumber(int number) {
@@ -193,7 +187,4 @@ public class RouletteGame extends JFrame {
             g2d.fillPolygon(new int[]{centerX - 10, centerX + 10, centerX}, new int[]{10, 10, 30}, 3);
         }
     }
-
 }
-
-

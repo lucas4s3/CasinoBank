@@ -1,213 +1,124 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class CasinoApp {
-    Blackjack blackJack;
-    RouletteGame roulette;
-    Scanner scanner = new Scanner(System.in);
-    UserManager userManager = new UserManager();
-    User currentuser;
+    private UserManager userManager;
+    private User currentUser;
+    private boolean isLoggedIn;
+    private boolean inGame;
+    private Game currentGame;
 
-    boolean isLoggedIn = false;
-    boolean inGame = false;
-
-    public CasinoApp() {
-        displayNotLoggedIn();
+    public CasinoApp(UserManager userManager) {
+        this.userManager = userManager;
+        this.isLoggedIn = false;
+        this.inGame = false;
     }
 
-    // Logga in
-    public void logInUser() {
-        ArrayList<String> credentials = getCredentials();
-        User user = userManager.loginUser(credentials.get(0), credentials.get(1));
-        if (user != null) {
-            currentuser = user;
+    public boolean loginUser(String username, String password) {
+        User user = userManager.findUser(username);
+        if (user != null && user.getPassword().equals(password)) {
+            currentUser = user;
             isLoggedIn = true;
-            System.out.println("Välkommen " + currentuser.getUsername() + "!");
-            System.out.println(currentuser);
-            displayLoggedIn();
-        } else {
-            System.out.println("Inloggning misslyckades");
-            displayNotLoggedIn();
+            return true;
         }
+        return false;
     }
 
-    // Registrera konto
-    public void registerUser() {
-        ArrayList<String> credentials = getCredentials();
-        userManager.registerUser(credentials.get(0), credentials.get(1));
-        displayNotLoggedIn();
+    public boolean registerUser(String username, String password) {
+        if (userManager.findUser(username) != null) {
+            return false;
+        }
+        User newUser = new User(username, password, 0.0, 9999999.0);
+        userManager.addUser(newUser);
+        return true;
     }
 
-    // Logga ut
     public void logOutUser() {
-        currentuser = null;
+        currentUser = null;
         isLoggedIn = false;
-        System.out.println("Du är utloggad.");
-        displayNotLoggedIn();
     }
 
-    // Uttag
-    public void withdraw(int amount) {
-        if (!isLoggedIn || currentuser == null) {
-            System.out.println("Du måste vara inloggad för att göra ett uttag.");
-            return;
+    public void playGame(String chosenGame) throws IllegalArgumentException {
+        switch (chosenGame.toUpperCase()) {
+            case "BLACKJACK" -> currentGame = GameFactory.getGame(GameType.BLACKJACK, currentUser);
+            case "ROULETTE" -> currentGame = GameFactory.getGame(GameType.ROULETTE, currentUser);
+            default -> throw new IllegalArgumentException("Ogiltigt spel.");
         }
-
-        if (amount <= 0) {
-            System.out.println("Beloppet måste vara större än 0.");
-            return;
-        }
-
-        if (currentuser.getBalance() < amount) {
-            System.out.println("Du har inte tillräckligt med saldo för detta uttag.");
-            return;
-        }
-
-        currentuser.setBalance(currentuser.getBalance() - amount);
-        userManager.saveUsers();
-        System.out.println("Uttag lyckades! Nytt saldo: " + currentuser.getBalance() + " kr.");
-
-    }
-
-    // Insättning
-    public void deposit(int amount) {
-        if (!isLoggedIn || currentuser == null) {
-            System.out.println("Du måste vara inloggad för att göra en insättning.");
-            return;
-        }
-
-        if (amount <= 0) {
-            System.out.println("Beloppet måste vara större än 0.");
-            return;
-        }
-
-        if (amount > currentuser.getDepositLimit()) {
-            System.out.println("Beloppet överstiger din insättningsgräns på " + currentuser.getDepositLimit() + " kr.");
-            return;
-        }
-
-        currentuser.setBalance(currentuser.getBalance() + amount);
-        userManager.saveUsers();
-        System.out.println("Insättning lyckades! Nytt saldo: " + currentuser.getBalance() + " kr.");
-
-    }
-
-    // Sätt insättningsgräns
-    public void setDepositLimit() {
-        if (!isLoggedIn || currentuser == null) {
-            System.out.println("Du måste vara inloggad för att sätta insättningsgräns.");
-            return;
-        }
-
-        System.out.println("Ange ny insättningsgräns: ");
-        int DLimit = Integer.parseInt(scanner.nextLine());
-        if (DLimit <= 0) {
-            System.out.println("Insättningsgränsen måste vara större än 0.");
-            return;
-        }
-
-        currentuser.setDepositLimit(DLimit);
-        userManager.saveUsers();
-        System.out.println("Ny insättningsgräns: " + currentuser.getDepositLimit() + " kr.");
-    }
-
-    // Gå in i spel
-    public void enterGame() {
+        currentGame.startGame();
         inGame = true;
-        displayInGame();
-
     }
 
-    // Gå ut ur spel
     public void quitGame() {
+        if (currentGame != null) {
+            currentGame.closeGame();
+        }
+
         inGame = false;
-        displayLoggedIn();
-
+        currentGame = null;
+        System.out.println("Du har avslutat spelet.");
     }
 
-    private ArrayList<String> getCredentials() {
-        ArrayList<String> credentials = new ArrayList<>();
-        System.out.println("Användarnamn: ");
-        String userName = scanner.nextLine().trim();
-        System.out.println("Lösenord: ");
-        String password = scanner.nextLine().trim();
-
-        credentials.add(userName);
-        credentials.add(password);
-
-        return credentials;
-
-    }
-
-    private void displayNotLoggedIn() {
-        String userChoice;
-
-        System.out.println("Logga in eller Registrera nytt konto: ");
-        userChoice = scanner.nextLine().trim();
-
-        if (userChoice.equalsIgnoreCase("Logga in")) {
-            logInUser();
-        } else if (userChoice.equalsIgnoreCase("Registrera")) {
-            registerUser();
-        } else {
-            System.out.println("Ogiltigt val, försök igen.");
-            displayNotLoggedIn();
+    public void addFunds(double amount) {
+        if (amount <= 0) {
+            System.out.println("Beloppet måste vara större än 0.");
+            return;
         }
-    }
 
-
-    private void displayLoggedIn() {
-        while (isLoggedIn && !inGame) {
-            System.out.println("\nVälj ett alternativ:\n1. Sätt in pengar\n2. Ta ut pengar\n3. Sätt insättningsgräns\n4. Visa saldo\n5. Spela spel\n6. Logga ut");
-            String choice = scanner.nextLine();
-
-            switch (choice) {
-                case "1":
-                    System.out.println("Ange belopp att sätta in: ");
-                    int depositAmount = Integer.parseInt(scanner.nextLine());
-                    deposit(depositAmount);
-                    break;
-                case "2":
-                    System.out.println("Ange belopp att ta ut: ");
-                    int withdrawAmount = Integer.parseInt(scanner.nextLine());
-                    withdraw(withdrawAmount);
-                    break;
-                case "3":
-                    setDepositLimit();
-                    break;
-                case "4":
-                    System.out.println("Ditt saldo: " + currentuser.getBalance() + " kr.");
-                    break;
-                case "5":
-                    enterGame();
-                    break;
-                case "6":
-                    logOutUser();
-                    return;
-                default:
-                    System.out.println("Ogiltigt val, försök igen.");
-
-            }
+        if (amount > currentUser.getDepositLimit()) {
+            System.out.println("Beloppet överstiger din insättningsgräns på " + currentUser.getDepositLimit());
+            return;
         }
+
+        currentUser.setBalance(currentUser.getBalance() + amount);
+        userManager.saveUsers();
+        System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance());
     }
 
-            private void displayInGame() {
-                System.out.println("Du är i spelmenyn. Skriv '1' för BlackJack. '2' för Roulette. '3' för Slots");
-                String input = scanner.nextLine();
-                switch (input) {
-                    case "1":
-                            blackJack = new Blackjack(currentuser);
-                            break;
+    public void withdrawFunds(double amount) {
 
-                    case "2":
-                        roulette = new RouletteGame(currentuser);
-                        break;
-                }
+        if (amount <= 0) {
+            System.out.println("Beloppet måste vara större än 0.");
+            return;
+        }
 
-            }
+        if (currentUser.getBalance() < amount) {
+            System.out.println("Otillräckligt saldo.");
+            return;
+        }
 
-      public static void main(String[] args) {
-        CasinoApp app = new CasinoApp();
-      }
+        currentUser.setBalance(currentUser.getBalance() - amount);
+        userManager.saveUsers();
+        System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance());
+    }
 
+    public String viewAccountInfo() {
+        return "Användare: " + currentUser.getUsername() + ", Saldo: " + currentUser.getBalance() +
+                ", Insättningsgräns: " + currentUser.getDepositLimit();
+    }
+
+    public void setDepositLimit(double limit) {
+
+        if (limit <= 0) {
+            System.out.println("Gränsen måste vara större än 0.");
+            return;
+        }
+
+        currentUser.setDepositLimit(limit);
+        userManager.saveUsers();
+        System.out.println("Ny insättningsgräns: " + currentUser.getDepositLimit());
+    }
+
+    // Getters - - - - - -
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public Game getCurrentGame() {
+        return currentGame;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

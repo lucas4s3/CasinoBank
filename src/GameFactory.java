@@ -1,9 +1,9 @@
 public class GameFactory {
 
-    public Game getGame(GameType game) {
+    public static Game getGame(GameType game, User user) {
         return switch (game) {
-            case ROULETTE -> new RouletteGame();
-            case BLACKJACK -> new BlackJackGame();
+            case ROULETTE -> new RouletteGame(user);
+            case BLACKJACK -> new Blackjack(user);
         };
     }
 }
