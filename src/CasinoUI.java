@@ -88,12 +88,19 @@ public class CasinoUI {
                 }
             } else {
                 // Inuti ett spel
-                System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet.");
+                System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet eller 'hjälp' för instruktioner.");
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("quit")) {
                     app.quitGame();
-                } else {
-                    System.out.println("Spelet ej implementerat i detalj.");
+                } else if (input.equalsIgnoreCase("hjälp")) {
+                    Game currentGame = app.getCurrentGame();
+                    if (currentGame != null) {
+                        currentGame.displayInstructions();
+                    }
+                    else {
+                        System.out.println("Spelet ej implementerat i detalj.");
+
+                    }
                 }
             }
         }

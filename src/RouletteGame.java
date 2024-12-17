@@ -4,11 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-// Anta att du har interfacet:
-// public interface Game {
-//     void startGame();
-//     void displayInstructions();
-// }
+
 
 public class RouletteGame extends JFrame implements Game {
     private User user;
@@ -68,11 +64,11 @@ public class RouletteGame extends JFrame implements Game {
 
     @Override
     public void displayInstructions() {
-        String instructions = "Roulette Instructions:\n" +
-                "- Choose your bet type (Red, Black, Odd, Even, or a specific Number).\n" +
-                "- Enter your bet amount and click 'Spin the Wheel'.\n" +
-                "- If you win, your winnings are added to your balance.";
-        JOptionPane.showMessageDialog(this, instructions, "Instructions", JOptionPane.INFORMATION_MESSAGE);
+        String instructions = "Roulette-instruktioner:\n" +
+                "- Välj vilken typ av satsning du vill göra (Röd, Svart, Udda, Jämn eller ett specifikt nummer).\n" +
+                "- Ange hur mycket du vill satsa och klicka på 'Spin the Wheel'.\n" +
+                "- Om du vinner läggs vinsten till ditt saldo.";
+        JOptionPane.showMessageDialog(this, instructions, "Instruktioner", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
