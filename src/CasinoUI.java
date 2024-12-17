@@ -1,13 +1,12 @@
 import java.util.Scanner;
 
 public class CasinoUI {
-    private final UserManager userManager;
+    static final UserManager userManager = UserManager.getInstance();
     private final CasinoApp app;
     private final Scanner scanner;
     private boolean running;
 
     public CasinoUI() {
-        userManager = new UserManager();
         app = new CasinoApp(userManager);
         scanner = new Scanner(System.in);
         running = true;
