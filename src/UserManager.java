@@ -25,10 +25,10 @@ public class UserManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 4) {
-                    String username = parts[1].trim();
-                    String password = parts[2].trim();
-                    double balance = Double.parseDouble(parts[3].trim());
-                    double depositLimit = Double.parseDouble(parts[4].trim());
+                    String username = parts[0].trim();
+                    String password = parts[1].trim();
+                    double balance = Double.parseDouble(parts[2].trim());
+                    double depositLimit = Double.parseDouble(parts[3].trim());
                     users.put(username, new User(username, password, balance, depositLimit));
                 }
             }
