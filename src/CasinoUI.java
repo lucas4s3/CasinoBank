@@ -75,7 +75,7 @@ public class CasinoUI {
                         System.out.println(app.viewAccountInfo());
                         break;
                     case "5":
-                        System.out.println("Vilket spel vill du spela? (roulette/slots)");
+                        System.out.println("Vilket spel vill du spela? (blackjack/roulette)");
                         String gameType = scanner.nextLine();
                         app.playGame(gameType);
                         break;
@@ -90,7 +90,7 @@ public class CasinoUI {
                 // Inuti ett spel
                 System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet.");
                 String input = scanner.nextLine();
-                if ("quit".equalsIgnoreCase(input)) {
+                if (input.equalsIgnoreCase("quit")) {
                     app.quitGame();
                 } else {
                     System.out.println("Spelet ej implementerat i detalj.");

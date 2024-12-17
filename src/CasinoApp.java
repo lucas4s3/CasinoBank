@@ -41,12 +41,16 @@ public class CasinoApp {
             System.out.println("Du måste vara inloggad för att spela.");
             return;
         }
-        currentGame = GameFactory.createGame(type);
+        currentGame = GameFactory.createGame(type, currentUser);
         currentGame.startGame();
         inGame = true;
     }
 
     public void quitGame() {
+        if (currentGame != null) {
+            currentGame.closeGame();
+        }
+
         inGame = false;
         currentGame = null;
         System.out.println("Du har avslutat spelet.");
