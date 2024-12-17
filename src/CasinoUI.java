@@ -139,9 +139,9 @@ public class CasinoUI {
     }
 
     private void handleInGameMenu() {
-        System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet eller 'hjälp' för instruktioner.");
+        System.out.println("Du är i spelet nu. Skriv 'Avsluta' för att avsluta spelet eller 'hjälp' för instruktioner.");
         String input = scanner.nextLine();
-        if (input.equalsIgnoreCase("quit")) {
+        if (input.equalsIgnoreCase("Avsluta")) {
             app.quitGame();
         } else if (input.equalsIgnoreCase("hjälp")) {
             Game currentGame = app.getCurrentGame();
