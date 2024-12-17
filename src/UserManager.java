@@ -24,7 +24,7 @@ public class UserManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 5) {
+                if (parts.length == 4) {
                     String username = parts[1].trim();
                     String password = parts[2].trim();
                     double balance = Double.parseDouble(parts[3].trim());
