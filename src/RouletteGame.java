@@ -43,7 +43,7 @@ public class RouletteGame extends JFrame implements Game {
         betField = new JTextField(5);
         bottomPanel.add(betField);
 
-        String[] betTypes = {"Red", "Black", "Odd", "Even", "Number"};
+        String[] betTypes = {"Red", "Black", "Green"};
         betTypeComboBox = new JComboBox<>(betTypes);
         bottomPanel.add(new JLabel("Bet Type:"));
         bottomPanel.add(betTypeComboBox);
@@ -94,7 +94,7 @@ public class RouletteGame extends JFrame implements Game {
 
             spinButton.setEnabled(false);
             Random random = new Random();
-            int resultNumber = random.nextInt(37);
+            int resultNumber = random.nextInt(36);
 
             spinTimer = new Timer(50, new ActionListener() {
                 private int rotations = 0;
@@ -155,7 +155,7 @@ public class RouletteGame extends JFrame implements Game {
         }
 
         public void rotateWheel() {
-            currentAngle = (currentAngle + 15) % 360;
+            currentAngle = (currentAngle + 10) % 360;
             repaint();
         }
 
@@ -174,16 +174,16 @@ public class RouletteGame extends JFrame implements Game {
             int centerY = getHeight() / 2;
             int radius = Math.min(getWidth(), getHeight()) / 2 - 10;
 
-            for (int i = 0; i < 37; i++) {
+            for (int i = 0; i < 36; i++) {
                 g2d.setColor((i == 0) ? Color.GREEN : (i % 2 == 0) ? Color.BLACK : Color.RED);
                 g2d.fillArc(centerX - radius, centerY - radius, radius * 2, radius * 2,
-                        currentAngle + i * (360 / 37), 360 / 37);
+                        currentAngle + i * (360 / 36), 360 / 36);
             }
 
             g2d.setColor(Color.WHITE);
             g2d.drawOval(centerX - radius, centerY - radius, radius * 2, radius * 2);
 
-            g2d.setColor(Color.BLACK);
+            g2d.setColor(Color.YELLOW);
             g2d.fillPolygon(new int[]{centerX - 10, centerX + 10, centerX}, new int[]{10, 10, 30}, 3);
         }
     }
