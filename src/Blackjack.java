@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Blackjack implements Game {
+    private int MIN_BET = 10;
+    private int MAX_BET = 10000;
     private User player;
     private JFrame frame;
     private int betAmount;
@@ -12,7 +14,7 @@ public class Blackjack implements Game {
     private JPanel gamePanel;
     private JPanel buttonpanel;
     private JPanel playerPanel, dealerPanel;
-    private JButton hitButton, standButton, restartButton,betButton;
+    private JButton hitButton, standButton, restartButton, betButton;
     private JTextField betField;
     private boolean hasPlacedBet = false;
 
@@ -21,16 +23,14 @@ public class Blackjack implements Game {
     private boolean isHiddenCardRevealed;
     private boolean gameOver = false;
 
-    // dealer
-    Card hiddenCard;
-    ArrayList<Card> dealerHand;
-    int dealerSum;
-    int dealerAceCount;
+    private Card hiddenCard;
+    private ArrayList<Card> dealerHand;
+    private int dealerSum;
+    private int dealerAceCount;
 
-    //player
-    ArrayList<Card> playerHand;
-    int playerSum;
-    int playerAceCount;
+    private ArrayList<Card> playerHand;
+    private int playerSum;
+    private int playerAceCount;
 
     Blackjack(User user) {
         this.player = user;
@@ -71,19 +71,31 @@ public class Blackjack implements Game {
 
     @Override
     public void displayInstructions() {
+        System.out.println("=".repeat(40));
+        System.out.println("      INSTRUKTIONER FÖR BLACKJACK          ");
+        System.out.println("=".repeat(40));
+        System.out.println("1. Målet är att komma så nära 21 som möjligt utan att överskrida det.");
+        System.out.println("2. Börja genom att placera en insats.");
+        System.out.println("3. Tryck på 'Deal' för att få två kort. Dealern får också två kort, varav ett är öppet.");
+        System.out.println("4. Välj 'Hit' för att dra ett till kort eller 'Stand' för att stanna.");
+        System.out.println("5. Om din hand överskrider 21, förlorar du automatiskt.");
+        System.out.println("6. Om du vinner mot dealern:");
+        System.out.println("7. Vinst dubblar insatsen.");
+        System.out.println("7. Dealern måste stanna på 17 eller högre.");
+        System.out.println("-".repeat(40));
 
     }
 
-    private void initalizeUI(){
+    private void initalizeUI() {
         frame = new JFrame("Blackjack");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400,400);
+        frame.setSize(400, 400);
         frame.setLocationRelativeTo(null);
 
-        gamePanel = new JPanel(new GridLayout(2,1));
+        gamePanel = new JPanel(new GridLayout(2, 1));
         buttonpanel = new JPanel(new FlowLayout());
         playerBalance = new JLabel("Balance: " + player.getBalance());
-        bettingPanel = new JPanel(new GridLayout(1,1));
+        bettingPanel = new JPanel(new GridLayout(1, 1));
         dealerPanel = new JPanel();
         playerPanel = new JPanel();
 
@@ -99,7 +111,7 @@ public class Blackjack implements Game {
         restartButton = new JButton("Restart");
         restartButton.setForeground(Color.RED);
         betField = new JTextField();
-        betField.setSize(10,500);
+        betField.setSize(10, 500);
 
         frame.add(bettingPanel, BorderLayout.NORTH);
         frame.add(buttonpanel, BorderLayout.SOUTH);
@@ -135,9 +147,12 @@ public class Blackjack implements Game {
             try {
                 betAmount = Integer.parseInt(betField.getText());
 
-                if (betAmount < 5) {
-                    JOptionPane.showMessageDialog(frame, "Insatsen måste vara mer än 5");
+                if (betAmount < MIN_BET) {
+                    JOptionPane.showMessageDialog(frame, "Insatsen måste vara mer än 5kr");
                     return;
+                }
+                if (betAmount > MAX_BET) {
+                    JOptionPane.showMessageDialog(frame, "Insatsen måste vara mindre än 10 000kr");
                 }
 
                 if (betAmount > player.getBalance()) {
@@ -154,15 +169,13 @@ public class Blackjack implements Game {
 
                 updateHands();
                 playerPanel.setBorder(BorderFactory.createTitledBorder("Player hand: " + playerSum));
-
+                dealerPanel.setBorder(BorderFactory.createTitledBorder("Dealer hand: " + (dealerSum - hiddenCard.getValue())));
 
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(frame, "Ange ett giltigt nummer.");
             }
         });
-
-
         frame.setVisible(true);
     }
 
@@ -176,7 +189,6 @@ public class Blackjack implements Game {
         standButton.setEnabled(false);
         updateHands();
         resetScores();
-
     }
 
     private void playerHit() {
@@ -190,10 +202,10 @@ public class Blackjack implements Game {
         removePlayerAce();
         updateHands();
         playerPanel.setBorder(BorderFactory.createTitledBorder("Player hand : " + playerSum));
+        dealerPanel.setBorder(BorderFactory.createTitledBorder("Dealer hand: " + dealerSum));
 
 
-
-        if (playerSum > 21){
+        if (playerSum > 21) {
             JOptionPane.showMessageDialog(frame, "Du förlora, dealern vann.");
             gameOver = true;
             hitButton.setEnabled(false);
@@ -205,13 +217,11 @@ public class Blackjack implements Game {
         if (gameOver) {
             return;
         }
-
         if (!isHiddenCardRevealed) {
             dealerHand.add(hiddenCard);
             removeDealerAce();
             isHiddenCardRevealed = true;
         }
-
         while (dealerSum < 17) {
             Card card = deck.remove(deck.size() - 1);
             dealerSum += card.getValue();
@@ -226,13 +236,12 @@ public class Blackjack implements Game {
 
 
         if (dealerSum > 21 || playerSum > dealerSum) {
-            try{
+            try {
                 betAmount = Integer.parseInt(betField.getText());
                 int winnings = betAmount * 2;
                 player.setBalance(player.getBalance() + winnings);
                 playerBalance.setText("Balance: " + player.getBalance());
-                playerPanel.setBorder(BorderFactory.createTitledBorder("You won! " + winnings));
-                //JOptionPane.showMessageDialog(frame, "Du vann " + winnings + "!");
+                playerPanel.setBorder(BorderFactory.createTitledBorder("You won! " + winnings + "kr"));
                 endGame();
 
             } catch (NumberFormatException e) {
@@ -241,12 +250,10 @@ public class Blackjack implements Game {
         } else if (dealerSum == playerSum) {
             betAmount = Integer.parseInt(betField.getText());
             player.setBalance(player.getBalance() + betAmount);
-            playerPanel.setBorder(BorderFactory.createTitledBorder("its a tie! "));
-          //  JOptionPane.showMessageDialog(frame, "Det vart lika");
+            playerPanel.setBorder(BorderFactory.createTitledBorder("It's a tie!"));
             endGame();
         } else
-            playerPanel.setBorder(BorderFactory.createTitledBorder("You lose! "));
-         //   JOptionPane.showMessageDialog(frame,"Dealern vann");
+            playerPanel.setBorder(BorderFactory.createTitledBorder("You lose!"));
         gameOver = true;
         hitButton.setEnabled(false);
         standButton.setEnabled(false);
@@ -257,7 +264,7 @@ public class Blackjack implements Game {
         dealerPanel.removeAll();
         playerPanel.removeAll();
 
-        if (hasPlacedBet){
+        if (hasPlacedBet) {
             for (Card card : dealerHand) {
                 addCardToPanel(card, dealerPanel);
             }
@@ -268,12 +275,11 @@ public class Blackjack implements Game {
 
         if (!gameOver) {
             if (!isHiddenCardRevealed) {
-                addCardToPanel(new Card("Hidden", ""), dealerPanel); // Visa ett dolt kort
+                addCardToPanel(new Card("Hidden", ""), dealerPanel);
             } else {
-                addCardToPanel(hiddenCard, dealerPanel); // Visa det faktiska kortet
+                addCardToPanel(hiddenCard, dealerPanel);
             }
         }
-
 
 
         dealerPanel.revalidate();
@@ -283,10 +289,11 @@ public class Blackjack implements Game {
     }
 
 
-    private void resetScores(){
-        playerPanel.setBorder(BorderFactory.createTitledBorder("Player hand: " + playerSum));
-        dealerPanel.setBorder(BorderFactory.createTitledBorder("Dealer hand: " + (dealerSum - hiddenCard.getValue())));
+    private void resetScores() {
+        playerPanel.setBorder(BorderFactory.createTitledBorder("Player hand: " + "0"));
+        dealerPanel.setBorder(BorderFactory.createTitledBorder("Dealer hand: " + "0"));
     }
+
     private void endGame() {
         gameOver = true;
         hitButton.setEnabled(false);
@@ -366,6 +373,7 @@ public class Blackjack implements Game {
         }
         return playerSum;
     }
+
     private int removeDealerAce() {
         while (dealerSum > 21 && dealerAceCount > 0) {
             dealerSum -= 10;
