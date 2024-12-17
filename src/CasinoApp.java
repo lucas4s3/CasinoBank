@@ -197,9 +197,11 @@ public class CasinoApp {
                 switch (input) {
                     case "1":
                             blackJack = new Blackjack(currentuser);
+                            break;
 
                     case "2":
-                        roulette = new RouletteGame();
+                        roulette = new RouletteGame(currentuser);
+                        break;
                 }
 
             }

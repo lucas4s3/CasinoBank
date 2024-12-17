@@ -37,12 +37,15 @@ public class RouletteGame extends JFrame {
     private JTextField betField; // Fält för att mata in insatsen
     private JComboBox<String> betTypeComboBox; // Rullgardinsmeny för att välja satsningstyp
     private JButton spinButton; // Knapp för att snurra hjulet
-    private int balance = 1000; // Startbalansen för spelaren
+    private int balance;  // Startbalansen för spelaren
     private RouletteWheelPanel wheelPanel; // Panel som visar roulettehjulet
     private Timer spinTimer; // Timer för att animera hjulets rotation
+    private User player;
 
-    public RouletteGame() {
+    public RouletteGame(User currentuser) {
         // Konfigurerar fönstret
+        this.player = currentuser;
+        this.balance = player.getBalance();
         setTitle("Roulette Game");
         setSize(500, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -141,6 +144,7 @@ public class RouletteGame extends JFrame {
             }
 
             balanceLabel.setText("Balance: $" + balance);
+            player.setBalance(balance);
 
             if (balance <= 0) {
                 JOptionPane.showMessageDialog(RouletteGame.this, "Game Over! You're out of money.");
