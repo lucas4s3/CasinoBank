@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class CasinoUI {
-    private UserManager userManager;
-    private CasinoApp app;
-    private Scanner scanner;
+    private final UserManager userManager;
+    private final CasinoApp app;
+    private final Scanner scanner;
     private boolean running;
 
     public CasinoUI() {
@@ -139,10 +139,15 @@ public class CasinoUI {
     }
 
     private void handleInGameMenu() {
-        System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet.");
+        System.out.println("Du är i spelet nu. Skriv 'quit' för att avsluta spelet eller 'hjälp' för instruktioner.");
         String input = scanner.nextLine();
         if (input.equalsIgnoreCase("quit")) {
             app.quitGame();
+        } else if (input.equalsIgnoreCase("hjälp")) {
+            Game currentGame = app.getCurrentGame();
+            if (currentGame != null) {
+                currentGame.displayInstructions();
+            }
         } else {
             System.out.println("Spelet ej implementerat i detalj.");
         }
