@@ -115,20 +115,41 @@ public class CasinoUI {
 
     private void handleDeposit() {
         System.out.println("Ange belopp att sätta in:");
-        double depositAmount = Double.parseDouble(scanner.nextLine());
-        app.addFunds(depositAmount);
+        try {
+            double depositAmount = Double.parseDouble(scanner.nextLine());
+            app.addFunds(depositAmount);
+        } catch (NumberFormatException e) {
+            System.out.println("Du måste ange beloppet i siffror");
+            handleDeposit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void handleWithdraw() {
         System.out.println("Ange belopp att ta ut:");
-        double withdrawAmount = Double.parseDouble(scanner.nextLine());
-        app.withdrawFunds(withdrawAmount);
+        try {
+            double withdrawAmount = Double.parseDouble(scanner.nextLine());
+            app.withdrawFunds(withdrawAmount);
+        } catch (NumberFormatException e) {
+            System.out.println("Du måste ange beloppet i siffror");
+            handleWithdraw();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void handleSetDepositLimit() {
         System.out.println("Ange ny insättningsgräns:");
+        try{
         double limit = Double.parseDouble(scanner.nextLine());
         app.setDepositLimit(limit);
+        }catch (NumberFormatException e){
+            System.out.println("Du måste ange beloppet i siffror");
+            handleSetDepositLimit();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void handlePlayGame() {
