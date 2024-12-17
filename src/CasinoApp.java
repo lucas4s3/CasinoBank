@@ -41,9 +41,14 @@ public class CasinoApp {
             System.out.println("Du måste vara inloggad för att spela.");
             return;
         }
-        currentGame = GameFactory.createGame(type, currentUser);
-        currentGame.startGame();
-        inGame = true;
+        try {
+            GameType gameType = GameType.valueOf(type.toUpperCase());
+            currentGame = GameFactory.getGame(gameType, currentUser);
+            currentGame.startGame();
+            inGame = true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ogiltigt speltyp. Välj 'blackjack' eller 'roulette'.");
+        }
     }
 
     public void quitGame() {
