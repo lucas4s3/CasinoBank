@@ -31,18 +31,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-public class RouletteGame extends JFrame implements  Game {
+public class RouletteGame extends JFrame {
     private JLabel balanceLabel; // Visar spelarens nuvarande balans
     private JLabel resultLabel; // Visar resultatet av den senaste spinnen
     private JTextField betField; // Fält för att mata in insatsen
     private JComboBox<String> betTypeComboBox; // Rullgardinsmeny för att välja satsningstyp
     private JButton spinButton; // Knapp för att snurra hjulet
-    private int balance = 1000; // Startbalansen för spelaren
+    private int balance;  // Startbalansen för spelaren
     private RouletteWheelPanel wheelPanel; // Panel som visar roulettehjulet
     private Timer spinTimer; // Timer för att animera hjulets rotation
+    private User player;
 
-    public RouletteGame() {
+    public RouletteGame(User currentuser) {
         // Konfigurerar fönstret
+        this.player = currentuser;
+        this.balance = player.getBalance();
         setTitle("Roulette Game");
         setSize(500, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -77,16 +80,6 @@ public class RouletteGame extends JFrame implements  Game {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true); // Visar fönstret
-    }
-
-    @Override
-    public void startGame() {
-
-    }
-
-    @Override
-    public void displayInstructions() {
-
     }
 
     private class SpinButtonListener implements ActionListener {
@@ -151,6 +144,7 @@ public class RouletteGame extends JFrame implements  Game {
             }
 
             balanceLabel.setText("Balance: $" + balance);
+            player.setBalance(balance);
 
             if (balance <= 0) {
                 JOptionPane.showMessageDialog(RouletteGame.this, "Game Over! You're out of money.");
@@ -200,8 +194,6 @@ public class RouletteGame extends JFrame implements  Game {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(RouletteGame::new);
-    }
 }
+
 
