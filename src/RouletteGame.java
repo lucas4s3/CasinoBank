@@ -63,7 +63,7 @@ public class RouletteGame extends JFrame implements Game {
 
         String[] betTypes = {"RÖD", "SVART", "GRÖN"};
         betTypeComboBox = new JComboBox<>(betTypes);
-        bottomPanel.add(new JLabel("FÄRG:"));
+        bottomPanel.add(new JLabel("Färg:"));
         bottomPanel.add(betTypeComboBox);
 
         spinButton = new JButton("Snurra hjulet");
@@ -159,10 +159,10 @@ public class RouletteGame extends JFrame implements Game {
             if (win) {
                 int payout = betType.equals("Number") ? betAmount * 35 : betAmount * 2;
                 user.setBalance(currentBalance + payout);
-                resultLabel.setText("You win! Number: " + resultNumber + " (" + color + ")");
+                resultLabel.setText("Du vann!" + " (" + color + ")");
             } else {
                 user.setBalance(currentBalance - betAmount);
-                resultLabel.setText("Du förlora! Nummer: " + resultNumber + " (" + color + ")");
+                resultLabel.setText("Du förlora! " + " (" + color + ")");
             }
 
             balanceLabel.setText("Saldo: " + user.getBalance()+" SEK");

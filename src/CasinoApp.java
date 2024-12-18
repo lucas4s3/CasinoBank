@@ -13,7 +13,7 @@ public class CasinoApp {
         this.isLoggedIn = false;
         this.inGame = false;
     }
-    public static CasinoApp getInstance(UserManager userManager) {
+    public static synchronized CasinoApp getInstance(UserManager userManager) {
         if (instance == null) {
             instance = new CasinoApp(userManager);
         }

@@ -67,7 +67,7 @@ public class UserManager {
         ArrayList<User> topList = getUserTopList();
         SwingUtilities.invokeLater(() -> new TopListUI().showTopListWindow(topList));
     }
-    public ArrayList<User> getUserTopList() {
+    private ArrayList<User> getUserTopList() {
         ArrayList<User> topList = new ArrayList<>(users.values());
         topList.sort(Comparator.comparing(User::getBalance).reversed());
         return topList;

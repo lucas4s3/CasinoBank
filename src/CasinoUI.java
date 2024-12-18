@@ -1,11 +1,10 @@
 import java.util.Scanner;
 
 public class CasinoUI {
-    static final UserManager userManager = UserManager.getInstance();
+    private final UserManager userManager = UserManager.getInstance();
     private final CasinoApp app;
     private final Scanner scanner;
     private boolean running;
-    private TopListUI topListUI;
 
     public CasinoUI() {
         app = CasinoApp.getInstance(userManager);
