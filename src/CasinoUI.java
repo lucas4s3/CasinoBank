@@ -68,10 +68,24 @@ public class CasinoUI {
     }
 
     private void handleRegister() {
+        while (true) {
+            System.out.println("Ange ålder:");
+            int age = scanner.nextInt();
+            scanner.nextLine();
+
+            if (age < 18) {
+                System.out.println("!Du måste ha fyllt minst 18 år för att kunna registrera dig!");
+                continue;
+            }
+
+            break;
+        }
         System.out.println("Ange nytt användarnamn:");
         String newUsername = scanner.nextLine();
+
         System.out.println("Ange lösenord:");
         String newPassword = scanner.nextLine();
+
         if (app.registerUser(newUsername, newPassword)) {
             System.out.println("Registrering lyckades! Logga nu in.");
         } else {
