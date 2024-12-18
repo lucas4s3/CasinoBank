@@ -163,11 +163,13 @@ public class Blackjack implements Game {
 
                 if (betAmount < MIN_BET || betAmount > MAX_BET) {
                     JOptionPane.showMessageDialog(frame, "Insatsen är minst 10 SEK eller högst 100 000 SEK");
+                    betButton.setEnabled(true);
                     return;
                 }
 
                 if (betAmount > player.getBalance()) {
                     JOptionPane.showMessageDialog(frame, "Du har inte tillräckligt med pengar för att satsa så mycket.");
+                    betButton.setEnabled(true);
                     return;
                 }
 

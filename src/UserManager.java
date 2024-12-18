@@ -1,4 +1,7 @@
+import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,4 +62,15 @@ public class UserManager {
             System.out.println("Kunde inte spara användare till fil.");
         }
     }
+
+    public void displayTopList() {
+        ArrayList<User> topList = getUserTopList();
+        SwingUtilities.invokeLater(() -> new TopListUI().showTopListWindow(topList));
+    }
+    public ArrayList<User> getUserTopList() {
+        ArrayList<User> topList = new ArrayList<>(users.values());
+        topList.sort(Comparator.comparing(User::getBalance).reversed());
+        return topList;
+    }
+
 }

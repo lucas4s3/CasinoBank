@@ -73,7 +73,7 @@ public class CasinoApp {
 
         currentUser.setBalance(currentUser.getBalance() + amount);
         userManager.saveUsers();
-        System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance());
+        System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance() + " SEK");
     }
 
     public void withdrawFunds(double amount) {
@@ -90,7 +90,7 @@ public class CasinoApp {
 
         currentUser.setBalance(currentUser.getBalance() - amount);
         userManager.saveUsers();
-        System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance());
+        System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance() + " SEK");
     }
     public String viewAccountInfo() {
         return "=".repeat(40) + "\nAnvändare: " + currentUser.getUsername() + "\nSaldo: " + currentUser.getBalance() +
