@@ -149,11 +149,9 @@ public class RouletteGame extends JFrame implements Game {
 
         private void checkBet(String betType, int betAmount, int resultNumber, String color) {
             boolean win = false;
-            if ((betType.equals("RÖD") && color.equals("RÖD")) ||
-                    (betType.equals("SVART") && color.equals("SVART")) ||
-                    (betType.equals("Odd") && resultNumber % 2 != 0 && resultNumber != 0) ||
-                    (betType.equals("Even") && resultNumber % 2 == 0 && resultNumber != 0) ||
-                    (betType.equals("GRÖN") && betField.getText().equals(String.valueOf(resultNumber)))) {
+            if ((betType.equals("RÖD") && color.equals("Red")) ||
+                    (betType.equals("SVART") && color.equals("Black")) ||
+                    (betType.equals("GRÖN") && color.equals("Green"))) {
                 win = true;
             }
 
