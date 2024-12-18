@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Blackjack implements Game {
+    private final int MAX_BET = 100000;
+    private final int MIN_BET = 10;
     private User player;
     private JFrame frame;
     private int betAmount;
@@ -88,7 +90,6 @@ public class Blackjack implements Game {
     public void closeGame() {
         if (frame != null) {
             frame.dispose();
-            frame = null;
         }
     }
 
@@ -109,7 +110,7 @@ public class Blackjack implements Game {
 
         gamePanel = new JPanel(new GridLayout(2, 1));
         buttonpanel = new JPanel(new GridLayout(1, 4));
-        playerBalance = new JLabel("Balance: " + player.getBalance() + "kr");
+        playerBalance = new JLabel("Saldo: " + player.getBalance() + " SEK");
         bettingPanel = new JPanel(new GridLayout(1, 1));
         dealerPanel = new JPanel();
         playerPanel = new JPanel();
@@ -166,9 +167,11 @@ public class Blackjack implements Game {
         betButton.addActionListener(e -> {
             try {
                 betAmount = Integer.parseInt(betField.getText());
+                betButton.setEnabled(false);
+                restartButton.setEnabled(false);
 
-                if (betAmount < 5) {
-                    JOptionPane.showMessageDialog(frame, "Insatsen måste vara mer än 5");
+                if (betAmount < MIN_BET || betAmount > MAX_BET) {
+                    JOptionPane.showMessageDialog(frame, "Insatsen är minst 10 SEK eller högst 100 000 SEK");
                     return;
                 }
 
@@ -178,7 +181,7 @@ public class Blackjack implements Game {
                 }
 
                 player.setBalance(player.getBalance() - betAmount);
-                playerBalance.setText("Saldo: " + player.getBalance());
+                playerBalance.setText("Saldo: " + player.getBalance() + " SEK");
                 JOptionPane.showMessageDialog(frame, "Du satsade " + betAmount + "kr");
                 hasPlacedBet = true;
                 hitButton.setEnabled(true);
@@ -205,6 +208,7 @@ public class Blackjack implements Game {
         isHiddenCardRevealed = false;
         hitButton.setEnabled(false);
         standButton.setEnabled(false);
+        betButton.setEnabled(true);
         updateHands();
         resetScores();
 
@@ -258,7 +262,7 @@ public class Blackjack implements Game {
             int winnings = betAmount * 2;
             player.setBalance(player.getBalance() + winnings);
             playerBalance.setText("Balance: " + player.getBalance());
-            playerPanel.setBorder(BorderFactory.createTitledBorder("Du vann! " + winnings + "kr"));
+            playerPanel.setBorder(BorderFactory.createTitledBorder("Du vann! " + winnings + " SEK"));
         } else if (dealerSum == playerSum) {
             betAmount = Integer.parseInt(betField.getText());
             player.setBalance(player.getBalance() + betAmount);
@@ -310,6 +314,7 @@ public class Blackjack implements Game {
         hitButton.setEnabled(false);
         standButton.setEnabled(false);
         updateHands();
+        restartButton.setEnabled(true);
     }
 
 
