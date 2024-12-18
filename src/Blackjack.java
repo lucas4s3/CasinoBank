@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -15,6 +17,7 @@ public class Blackjack implements Game {
     private JButton hitButton, standButton, restartButton, betButton, instructionsButton;
     private JTextField betField;
     private boolean hasPlacedBet = false;
+    private static final Color panelColor = new Color(53, 101, 77);
 
 
     ArrayList<Card> deck;
@@ -84,15 +87,24 @@ public class Blackjack implements Game {
     public void closeGame() {
         if (frame != null) {
             frame.dispose();
+            frame = null;
         }
     }
 
 
     private void initalizeUI() {
         frame = new JFrame("Blackjack");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize(500, 400);
         frame.setLocationRelativeTo(null);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeGame();
+                System.out.println("Spelet avslutas. Går tillbaka till huvudmenyn.");
+                CasinoApp.getInstance(UserManager.getInstance()).quitGame();
+            }
+        });
 
         gamePanel = new JPanel(new GridLayout(2, 1));
         buttonpanel = new JPanel(new GridLayout(1, 4));
@@ -134,11 +146,11 @@ public class Blackjack implements Game {
         gamePanel.add(playerPanel);
         gamePanel.add(dealerPanel);
 
-        gamePanel.setBackground(new Color(53, 101, 77));
-        dealerPanel.setBackground(new Color(53, 101, 77));
-        playerPanel.setBackground(new Color(53, 101, 77));
-        buttonpanel.setBackground(new Color(53, 101, 77));
-        bettingPanel.setBackground(new Color(53, 101, 77));
+        gamePanel.setBackground(panelColor);
+        dealerPanel.setBackground(panelColor);
+        playerPanel.setBackground(panelColor);
+        buttonpanel.setBackground(panelColor);
+        bettingPanel.setBackground(panelColor);
 
         //
         hitButton.setEnabled(false);
@@ -190,7 +202,6 @@ public class Blackjack implements Game {
         hasPlacedBet = false;
         startGame();
         isHiddenCardRevealed = false;
-        updateHands();
         hitButton.setEnabled(false);
         standButton.setEnabled(false);
         updateHands();
@@ -243,22 +254,14 @@ public class Blackjack implements Game {
 
 
         if (dealerSum > 21 || playerSum > dealerSum) {
-            try {
-                betAmount = Integer.parseInt(betField.getText());
-                int winnings = betAmount * 2;
-                player.setBalance(player.getBalance() + winnings);
-                playerBalance.setText("Balance: " + player.getBalance());
-                playerPanel.setBorder(BorderFactory.createTitledBorder("Du vann! " + winnings + "kr"));
-                endGame();
-
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
+            int winnings = betAmount * 2;
+            player.setBalance(player.getBalance() + winnings);
+            playerBalance.setText("Balance: " + player.getBalance());
+            playerPanel.setBorder(BorderFactory.createTitledBorder("Du vann! " + winnings + "kr"));
         } else if (dealerSum == playerSum) {
             betAmount = Integer.parseInt(betField.getText());
             player.setBalance(player.getBalance() + betAmount);
             playerPanel.setBorder(BorderFactory.createTitledBorder("Det blev lika!"));
-            endGame();
         } else
             playerPanel.setBorder(BorderFactory.createTitledBorder("Du förlora!"));
         gameOver = true;
@@ -341,7 +344,7 @@ public class Blackjack implements Game {
 
         public int getValue() {
             if ("AJQK".contains(value)) {
-                if (value.equalsIgnoreCase("A")) {
+                if (value.equals("A")) {
                     return 11;
                 }
                 return 10;

@@ -1,14 +1,21 @@
 public class CasinoApp {
+    private static CasinoApp instance;
     private UserManager userManager;
     private User currentUser;
     private boolean isLoggedIn;
     private boolean inGame;
     private Game currentGame;
 
-    public CasinoApp(UserManager userManager) {
+    private CasinoApp(UserManager userManager) {
         this.userManager = userManager;
         this.isLoggedIn = false;
         this.inGame = false;
+    }
+    public static CasinoApp getInstance(UserManager userManager) {
+        if (instance == null) {
+            instance = new CasinoApp(userManager);
+        }
+        return instance;
     }
 
     public boolean loginUser(String username, String password) {
@@ -48,11 +55,9 @@ public class CasinoApp {
     public void quitGame() {
         if (currentGame != null) {
             currentGame.closeGame();
+            inGame = false;
+            currentGame = null;
         }
-
-        inGame = false;
-        currentGame = null;
-        System.out.println("Du har avslutat spelet.");
     }
 
     public void addFunds(double amount) {
@@ -114,11 +119,4 @@ public class CasinoApp {
         return inGame;
     }
 
-    public Game getCurrentGame() {
-        return currentGame;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
 }
