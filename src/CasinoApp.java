@@ -92,10 +92,9 @@ public class CasinoApp {
         userManager.saveUsers();
         System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance());
     }
-
     public String viewAccountInfo() {
-        return "Användare: " + currentUser.getUsername() + ", Saldo: " + currentUser.getBalance() +
-                ", Insättningsgräns: " + currentUser.getDepositLimit();
+        return "=".repeat(40) + "\nAnvändare: " + currentUser.getUsername() + "\nSaldo: " + currentUser.getBalance() +
+                " SEK" + "\nInsättningsgräns: " + currentUser.getDepositLimit() + " SEK\n" + "=".repeat(40);
     }
 
     public void setDepositLimit(double limit) {
