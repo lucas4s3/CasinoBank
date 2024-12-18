@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class CasinoApp {
     private static CasinoApp instance;
     private UserManager userManager;
@@ -75,6 +73,7 @@ public class CasinoApp {
 
         currentUser.setBalance(currentUser.getBalance() + amount);
         userManager.saveUsers();
+        System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance() + " SEK");
 
         System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance());
         currentUser.addTransaction(amount, "DEPOSIT");
@@ -95,7 +94,7 @@ public class CasinoApp {
         currentUser.setBalance(currentUser.getBalance() - amount);
         userManager.saveUsers();
 
-        System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance());
+        System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance()+ " SEK");
         currentUser.addTransaction(amount, "WITHDRAW");
     }
     public String viewAccountInfo() {

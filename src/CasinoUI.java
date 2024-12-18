@@ -5,6 +5,7 @@ public class CasinoUI {
     private final CasinoApp app;
     private final Scanner scanner;
     private boolean running;
+    private TopListUI topListUI;
 
     public CasinoUI() {
         app = CasinoApp.getInstance(userManager);
@@ -84,9 +85,10 @@ public class CasinoUI {
         System.out.println("2. Ta ut pengar");
         System.out.println("3. Sätt insättningsgräns");
         System.out.println("4. Visa konto-info");
-        System.out.println("5. Visa transaktionshistorik");
-        System.out.println("6. Spela");
-        System.out.println("7. Logga ut");
+        System.out.println("5. Visa topplista");
+        System.out.println("6. Visa transaktionshistorik");
+        System.out.println("7. Spela");
+        System.out.println("8. Logga ut");
 
         String choice = scanner.nextLine();
         switch (choice) {
@@ -103,15 +105,19 @@ public class CasinoUI {
                 System.out.println(app.viewAccountInfo());
                 break;
             case "5":
-                app.viewTransactionsHistory();
+                UserManager.getInstance().displayTopList();
+                System.out.println("Visar topplista för registrerade spelare.");
                 break;
             case "6":
-                handlePlayGame();
+                app.viewTransactionsHistory();
                 break;
             case "7":
+               handlePlayGame();
+               break;
+            case "8":
                 UserManager.getInstance().saveUsers();
                 app.logOutUser();
-                System.out.println("Du är utloggad.");
+                System.out.println("Du är utloggad");
                 break;
             default:
                 System.out.println("Ogiltigt val.");

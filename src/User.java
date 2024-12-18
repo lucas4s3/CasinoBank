@@ -8,7 +8,7 @@ public class User {
     private double depositLimit;
     private ArrayList<String> transactionHistory;
 
-    public User( String username, String password, double accountBalance, double depositLimit) {
+    public User(String username, String password, double accountBalance, double depositLimit) {
         this.username = username;
         this.password = password;
         this.accountBalance = accountBalance;
