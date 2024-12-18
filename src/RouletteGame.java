@@ -2,13 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Random;
 
 
 
 public class RouletteGame extends JFrame implements Game {
-    private int MAX_BET;
-    private int MIN_BET;
+    private final int MAX_BET = 100000;
+    private final int MIN_BET = 10;
     private User user;
     private JLabel balanceLabel;
     private JLabel resultLabel;
@@ -17,6 +19,7 @@ public class RouletteGame extends JFrame implements Game {
     private JButton spinButton;
     private RouletteWheelPanel wheelPanel;
     private Timer spinTimer;
+    private static final Color panelColor = new Color(53, 101, 77);
 
     public RouletteGame(User user) {
         this.user = user;
@@ -24,28 +27,40 @@ public class RouletteGame extends JFrame implements Game {
 
         setTitle("Roulette");
         setSize(500, 600);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // DISPOSE_ON_CLOSE så du kan stänga fönstret utan att avsluta hela programmet
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // DISPOSE_ON_CLOSE så du kan stänga fönstret utan att avsluta hela programmet
         setLayout(new BorderLayout());
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeGame();
+                System.out.println("Spelet avslutas. Går tillbaka till huvudmenyn.");
+                CasinoApp.getInstance(UserManager.getInstance()).quitGame();
+            }
+        });
 
         // Toppanel
+
         JPanel topPanel = new JPanel(new GridLayout(2, 1));
-        balanceLabel = new JLabel("Saldo: " + user.getBalance() + "kr");
+        balanceLabel = new JLabel("Saldo: " + user.getBalance() + " SEK");
         resultLabel = new JLabel("Klicka på bet för att snurra hjulet");
         JButton instructions = new JButton("Instruktioner");
         topPanel.add(balanceLabel);
         topPanel.add(instructions);
         topPanel.add(resultLabel);
         add(topPanel, BorderLayout.NORTH);
+        topPanel.setBackground(panelColor);
 
         // Roulettehjulet
         wheelPanel = new RouletteWheelPanel();
         add(wheelPanel, BorderLayout.CENTER);
+        wheelPanel.setBackground(panelColor);
 
         // Bottenpanel för satsning
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(new JLabel("Insatsbelopp:"));
         betField = new JTextField(5);
         bottomPanel.add(betField);
+        bottomPanel.setBackground(panelColor);
 
         String[] betTypes = {"RÖD", "SVART", "GRÖN"};
         betTypeComboBox = new JComboBox<>(betTypes);
@@ -93,8 +108,14 @@ public class RouletteGame extends JFrame implements Game {
 
             try {
                 betAmount = Integer.parseInt(betField.getText());
-                if (betAmount <= 0 || betAmount > user.getBalance()) {
-                    throw new NumberFormatException();
+                if (betAmount < MIN_BET || betAmount > MAX_BET) {
+                    JOptionPane.showMessageDialog(null, "Insatsen är minst 10 SEK eller högst 100 000 SEK");
+                    return;
+                }
+
+                if (betAmount > user.getBalance()) {
+                    JOptionPane.showMessageDialog(null, "Du har inte tillräckligt med pengar för att satsa så mycket.");
+                    return;
                 }
             } catch (NumberFormatException ex) {
                 resultLabel.setText("Felaktig inmatning.");
@@ -147,7 +168,7 @@ public class RouletteGame extends JFrame implements Game {
                 resultLabel.setText("Du förlora! Nummer: " + resultNumber + " (" + color + ")");
             }
 
-            balanceLabel.setText("Saldo: " + user.getBalance()+"kr");
+            balanceLabel.setText("Saldo: " + user.getBalance()+" SEK");
 
             if (user.getBalance() <= 0) {
                 JOptionPane.showMessageDialog(RouletteGame.this, "Öka saldot för att fortsätta spela.");
