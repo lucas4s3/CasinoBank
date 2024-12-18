@@ -48,11 +48,11 @@ public class Blackjack implements Game {
         shuffleDeck();
         dealerSum = 0;
         dealerAceCount = 0;
-        hiddenCard = deck.remove(deck.size() - 1);
+        hiddenCard = deck.removeLast();
         dealerSum += hiddenCard.getValue();
         dealerAceCount += hiddenCard.isAce() ? 1 : 0;
 
-        Card card = deck.remove(deck.size() - 1);
+        Card card = deck.removeLast();
         dealerSum += card.getValue();
         dealerAceCount += card.isAce() ? 1 : 0;
         dealerHand.add(card);
@@ -63,10 +63,11 @@ public class Blackjack implements Game {
         playerAceCount = 0;
 
         for (int i = 0; i < 2; i++) {
-            card = deck.remove(deck.size() - 1);
+            card = deck.removeLast();
             playerSum += card.getValue();
             playerAceCount += card.isAce() ? 1 : 0;
             playerHand.add(card);
+
         }
 
     }
@@ -177,8 +178,8 @@ public class Blackjack implements Game {
                 }
 
                 player.setBalance(player.getBalance() - betAmount);
-                playerBalance.setText("Balance: " + player.getBalance());
-                JOptionPane.showMessageDialog(frame, "Du satsade " + betAmount + "!");
+                playerBalance.setText("Saldo: " + player.getBalance());
+                JOptionPane.showMessageDialog(frame, "Du satsade " + betAmount + "kr");
                 hasPlacedBet = true;
                 hitButton.setEnabled(true);
                 standButton.setEnabled(true);
@@ -213,7 +214,7 @@ public class Blackjack implements Game {
         if (gameOver) {
             return;
         }
-        Card card = deck.remove(deck.size() - 1);
+        Card card = deck.removeLast();
         playerSum += card.getValue();
         playerAceCount += card.isAce() ? 1 : 0;
         playerHand.add(card);
@@ -241,7 +242,7 @@ public class Blackjack implements Game {
         }
 
         while (dealerSum < 17) {
-            Card card = deck.remove(deck.size() - 1);
+            Card card = deck.removeLast();
             dealerSum += card.getValue();
             dealerAceCount += card.isAce() ? 1 : 0;
             dealerHand.add(card);
@@ -368,7 +369,6 @@ public class Blackjack implements Game {
                 Card card = new Card(values[j], suits[i]);
                 deck.add(card);
             }
-
         }
     }
 
