@@ -44,10 +44,6 @@ public class UserManager {
         saveUsers();
     }
 
-    public void removeUser(String username) {
-        users.remove(username);
-        saveUsers();
-    }
 
     public User findUser(String username) {
         return users.get(username);

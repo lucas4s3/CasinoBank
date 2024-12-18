@@ -37,10 +37,6 @@ public class User {
 
     public double getDepositLimit() { return depositLimit; }
 
-    public void setUsername(String username) { this.username = username; }
-
-    public void setPassword(String password) { this.password = password; }
-
     public void setBalance(double balance) { this.accountBalance = balance; }
 
     public void setDepositLimit(double limit) { this.depositLimit = limit; }

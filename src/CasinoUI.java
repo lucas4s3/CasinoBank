@@ -7,7 +7,7 @@ public class CasinoUI {
     private boolean running;
 
     public CasinoUI() {
-        app = new CasinoApp(userManager);
+        app = CasinoApp.getInstance(userManager);
         scanner = new Scanner(System.in);
         running = true;
     }
@@ -109,6 +109,7 @@ public class CasinoUI {
                 handlePlayGame();
                 break;
             case "7":
+                UserManager.getInstance().saveUsers();
                 app.logOutUser();
                 System.out.println("Du är utloggad.");
                 break;
@@ -138,20 +139,20 @@ public class CasinoUI {
         } catch (NumberFormatException e) {
             System.out.println("Du måste ange beloppet i siffror");
             handleWithdraw();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     private void handleSetDepositLimit() {
         System.out.println("Ange ny insättningsgräns:");
-        try{
-        double limit = Double.parseDouble(scanner.nextLine());
-        app.setDepositLimit(limit);
-        }catch (NumberFormatException e){
+        try {
+            double limit = Double.parseDouble(scanner.nextLine());
+            app.setDepositLimit(limit);
+        } catch (NumberFormatException e) {
             System.out.println("Du måste ange beloppet i siffror");
             handleSetDepositLimit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -169,19 +170,12 @@ public class CasinoUI {
             }
         }
     }
-
     private void handleInGameMenu() {
-        System.out.println("Du är i spelet nu. Skriv 'Avsluta' för att avsluta spelet eller 'hjälp' för instruktioner.");
-        String input = scanner.nextLine();
-        if (input.equalsIgnoreCase("Avsluta")) {
-            app.quitGame();
-        } else if (input.equalsIgnoreCase("hjälp")) {
-            Game currentGame = app.getCurrentGame();
-            if (currentGame != null) {
-                currentGame.displayInstructions();
-            }
-        } else {
-            System.out.println("Spelet ej implementerat i detalj.");
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
+
 }
