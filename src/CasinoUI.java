@@ -84,8 +84,9 @@ public class CasinoUI {
         System.out.println("2. Ta ut pengar");
         System.out.println("3. Sätt insättningsgräns");
         System.out.println("4. Visa konto-info");
-        System.out.println("5. Spela");
-        System.out.println("6. Logga ut");
+        System.out.println("5. Visa transaktionshistorik");
+        System.out.println("6. Spela");
+        System.out.println("7. Logga ut");
 
         String choice = scanner.nextLine();
         switch (choice) {
@@ -102,9 +103,12 @@ public class CasinoUI {
                 System.out.println(app.viewAccountInfo());
                 break;
             case "5":
-                handlePlayGame();
+                app.viewTransactionsHistory();
                 break;
             case "6":
+                handlePlayGame();
+                break;
+            case "7":
                 app.logOutUser();
                 System.out.println("Du är utloggad.");
                 break;

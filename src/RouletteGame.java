@@ -18,11 +18,10 @@ public class RouletteGame extends JFrame implements Game {
 
     public RouletteGame(User user) {
         this.user = user;
-        // Byt ut den lokala balance mot user.getBalance() nedan.
 
         setTitle("Roulette Game");
         setSize(500, 600);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // DISPOSE_ON_CLOSE så du kan stänga fönstret utan att avsluta hela programmet
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Toppanel

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class CasinoApp {
     private UserManager userManager;
     private User currentUser;
@@ -68,7 +70,9 @@ public class CasinoApp {
 
         currentUser.setBalance(currentUser.getBalance() + amount);
         userManager.saveUsers();
+
         System.out.println("Insättning lyckades! Nytt saldo: " + currentUser.getBalance());
+        currentUser.addTransaction(amount, "DEPOSIT");
     }
 
     public void withdrawFunds(double amount) {
@@ -85,12 +89,25 @@ public class CasinoApp {
 
         currentUser.setBalance(currentUser.getBalance() - amount);
         userManager.saveUsers();
+
         System.out.println("Uttag lyckades! Nytt saldo: " + currentUser.getBalance());
+        currentUser.addTransaction(amount, "WITHDRAW");
     }
 
     public String viewAccountInfo() {
         return "Användare: " + currentUser.getUsername() + ", Saldo: " + currentUser.getBalance() +
                 ", Insättningsgräns: " + currentUser.getDepositLimit();
+    }
+
+    public void viewTransactionsHistory() {
+        ArrayList<String> transactions =
+                currentUser.getTransactionHistory();
+
+        System.out.println("Senaste transaktioner: ");
+        transactions.forEach(transaction -> {
+            System.out.println(transaction);
+        });
+
     }
 
     public void setDepositLimit(double limit) {
