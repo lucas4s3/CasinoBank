@@ -220,6 +220,7 @@ public class Blackjack implements Game {
             gameOver = true;
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
+            endGame();
         }
     }
 
